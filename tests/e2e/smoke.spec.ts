@@ -2,5 +2,5 @@ import { test, expect } from '@playwright/test'
 
 test('home page loads', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('h1')).toContainText('Adopta')
+  await expect(page.locator('h1')).toContainText('Find a pet a home')
 })

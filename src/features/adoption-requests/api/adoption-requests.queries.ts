@@ -3,7 +3,7 @@ import { queryOptions } from '@tanstack/react-query'
 import {
   getAdoptionRequestFn,
   getMyAdoptionRequestsFn,
-} from './adoption-requests.server'
+} from './adoption-requests.serverfns'
 
 import type { AdoptionRequestListQuery, RequestRole } from '~/contracts'
 

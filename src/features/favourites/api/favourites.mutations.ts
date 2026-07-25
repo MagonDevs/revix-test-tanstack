@@ -5,7 +5,7 @@ import type { Pet } from '~/features/pets/model/pet.model'
 
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 
-import { addFavouriteFn, removeFavouriteFn } from './favourites.server'
+import { addFavouriteFn, removeFavouriteFn } from './favourites.serverfns'
 import { favouriteKeys } from './favourites.queries'
 
 interface FavouritesPage {

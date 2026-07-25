@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { getFavouritesFn } from './favourites.server'
+import { getFavouritesFn } from './favourites.serverfns'
 
 export const favouriteKeys = {
   all: ['favourites'] as const,

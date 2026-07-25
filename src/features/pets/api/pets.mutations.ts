@@ -12,7 +12,7 @@ import {
   updatePetFn,
   updatePetStatusFn,
   uploadPhotoFn,
-} from './pets.server'
+} from './pets.serverfns'
 import { petKeys } from './pets.queries'
 
 import type { Pet } from '../model/pet.model'

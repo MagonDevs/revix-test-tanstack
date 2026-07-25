@@ -39,7 +39,7 @@ const TAB_LABELS: Record<TabValue, string> = {
 }
 
 const EMPTY_MESSAGES: Record<TabValue, string> = {
-  all: 'No pets have been published yet.',
+  all: "You haven't published any pets yet.",
   available: 'No available pets right now.',
   reserved: 'No reserved pets right now.',
   adopted: 'No adopted pets yet.',

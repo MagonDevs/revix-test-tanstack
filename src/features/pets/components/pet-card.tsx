@@ -16,6 +16,7 @@ export function PetCard({ pet }: PetCardProps) {
     <Link
       to="/pets/$petId"
       params={{ petId: pet.id }}
+      aria-label={pet.name}
       className="group flex flex-col gap-2 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-pine focus-visible:ring-offset-2"
     >
       <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-hairline bg-surface">
@@ -41,9 +42,9 @@ export function PetCard({ pet }: PetCardProps) {
           className="absolute right-2 top-2"
         />
       </div>
-      <h3 className="truncate font-display text-base font-semibold text-ink">
+      <h2 className="truncate font-display text-base font-semibold text-ink">
         {pet.name}
-      </h3>
+      </h2>
       <PetRecordStrip
         species={pet.species}
         ageLabel={pet.ageLabel}

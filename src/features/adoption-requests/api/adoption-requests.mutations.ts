@@ -9,7 +9,7 @@ import {
   createAdoptionRequestFn,
   respondToRequestFn,
   withdrawRequestFn,
-} from './adoption-requests.server'
+} from './adoption-requests.serverfns'
 import { requestKeys } from './adoption-requests.queries'
 
 import type { AdoptionRequest } from '../model/adoption-request.model'

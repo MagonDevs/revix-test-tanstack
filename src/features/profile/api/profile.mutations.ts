@@ -6,7 +6,7 @@ import { userKeys } from '~/features/pets/api/pets.queries'
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 import { toast } from '~/shared/ui/toast'
 
-import { updateProfileFn } from './profile.server'
+import { updateProfileFn } from './profile.serverfns'
 
 import type { SessionUserDto, UpdateUserRequest } from '~/contracts'
 

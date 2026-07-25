@@ -4,7 +4,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { parseApiError } from '~/shared/lib/api-error'
 import { logger } from '~/shared/lib/logger'
 
-import { loginFn, logoutFn, registerFn } from './auth.server'
+import { loginFn, logoutFn, registerFn } from './auth.serverfns'
 import { authKeys } from './auth.queries'
 
 import type { LoginRequest, RegisterRequest } from '~/contracts'

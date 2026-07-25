@@ -6,7 +6,7 @@ import {
   getPetsFn,
   getUserFn,
   getUserPetsFn,
-} from './pets.server'
+} from './pets.serverfns'
 
 import type { MyPetsQuery, PetListQuery } from '~/contracts'
 

@@ -40,6 +40,7 @@ export function PetGallery({
               type="button"
               role="tab"
               aria-selected={index === activeIndex}
+              aria-label={`Photo ${index + 1} of ${photos.length}`}
               onClick={() => setActiveIndex(index)}
               onKeyDown={(e) => {
                 if (e.key === 'ArrowRight')

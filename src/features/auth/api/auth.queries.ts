@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { getSessionFn } from './auth.server'
+import { getSessionFn } from './auth.serverfns'
 
 export const authKeys = {
   all: ['auth'] as const,

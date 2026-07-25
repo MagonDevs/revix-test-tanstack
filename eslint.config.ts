@@ -129,7 +129,7 @@ export default tseslint.config(
             {
               group: ['~/server/*'],
               message:
-                'Server code may only be imported from *.server.ts files.',
+                'Server code may only be imported from *.serverfns.ts files.',
             },
           ],
         },
@@ -138,7 +138,7 @@ export default tseslint.config(
   },
   {
     files: [
-      'src/features/*/api/*.server.ts',
+      'src/features/*/api/*.serverfns.ts',
       'src/server/**',
       'src/routes/api/**',
       'src/mocks/**',

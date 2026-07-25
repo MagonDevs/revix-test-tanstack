@@ -1,0 +1,961 @@
+openapi: 3.1.0
+info:
+  title: Adopta API
+  version: "1.0.0"
+  description: >
+    REST contract for Adopta, a pet-adoption listing platform. This document is hand-written to
+    mirror the Zod schemas in `src/contracts/**` and the prose contract in
+    `docs/spec/03-api-contract.md`. It is the source of truth for a backend team implementing the
+    real API: the mock backend at `src/routes/api/v1/**` + `src/mocks/**` implements exactly this
+    contract today, and a real backend should implement the same shapes so swapping is a one-line
+    `API_BASE_URL` change on the frontend.
+  contact:
+    name: Adopta engineering
+servers:
+  - url: /api/v1
+    description: Relative to whatever host serves the app (mock or real backend)
+
+security:
+  - sessionCookie: []
+
+tags:
+  - name: auth
+  - name: users
+  - name: pets
+  - name: uploads
+  - name: adoption-requests
+  - name: favourites
+  - name: meta
+  - name: mock
+    description: Only available when MOCK_API=true. Not part of the production contract.
+
+paths:
+  /auth/register:
+    post:
+      tags: [auth]
+      summary: Register a new account and start a session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password, city]
+              properties:
+                name: { type: string, minLength: 2, maxLength: 60 }
+                email: { type: string, format: email, maxLength: 254 }
+                password: { type: string, minLength: 8, maxLength: 72 }
+                city: { type: string, minLength: 2, maxLength: 80 }
+      responses:
+        "201":
+          description: Account created, session cookie set
+          headers:
+            Set-Cookie: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionUser" }
+        "409":
+          description: Email already in use
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /auth/login:
+    post:
+      tags: [auth]
+      summary: Log in and start a session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email: { type: string, format: email }
+                password: { type: string }
+      responses:
+        "200":
+          description: Session cookie set
+          headers:
+            Set-Cookie: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionUser" }
+        "401":
+          description: Wrong email or password (one generic message, no user enumeration)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+
+  /auth/logout:
+    post:
+      tags: [auth]
+      summary: End the session
+      responses:
+        "204": { description: Session cleared }
+
+  /auth/session:
+    get:
+      tags: [auth]
+      summary: Get the current session user
+      security:
+        - sessionCookie: []
+        - {}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionUser" }
+        "401":
+          description: No session, or an expired one
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+
+  /users/{userId}:
+    get:
+      tags: [users]
+      summary: Public profile
+      security:
+        - sessionCookie: []
+        - {}
+      parameters:
+        - $ref: "#/components/parameters/userId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/User" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /users/me:
+    patch:
+      tags: [users]
+      summary: Update the current user's profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Any subset. `email` is rejected with 422 in the MVP.
+              properties:
+                name: { type: string, minLength: 2, maxLength: 60 }
+                city: { type: string, minLength: 2, maxLength: 80 }
+                phone: { type: [string, "null"], maxLength: 30 }
+                bio: { type: [string, "null"], maxLength: 500 }
+                avatarUrl: { type: [string, "null"], format: uri }
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionUser" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /users/{userId}/pets:
+    get:
+      tags: [users]
+      summary: A user's publicly visible (available) pets
+      security:
+        - sessionCookie: []
+        - {}
+      parameters:
+        - $ref: "#/components/parameters/userId"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/perPage"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaginatedPets" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /pets:
+    get:
+      tags: [pets]
+      summary: Browse pets
+      security:
+        - sessionCookie: []
+        - {}
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          description: Case-insensitive substring match over name, breed, description
+        - name: species
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { $ref: "#/components/schemas/Species" }
+        - name: size
+          in: query
+          style: form
+          explode: true
+          schema:
+            type: array
+            items: { $ref: "#/components/schemas/Size" }
+        - name: sex
+          in: query
+          schema: { $ref: "#/components/schemas/Sex" }
+        - name: ageGroup
+          in: query
+          schema: { $ref: "#/components/schemas/AgeGroup" }
+        - name: city
+          in: query
+          schema: { type: string }
+        - name: sort
+          in: query
+          schema: { $ref: "#/components/schemas/PetSort" }
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/perPage"
+      responses:
+        "200":
+          description: >
+            Only `available` and `reserved` pets — never `adopted` or `withdrawn` on this public
+            listing endpoint.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaginatedPets" }
+    post:
+      tags: [pets]
+      summary: Publish a new listing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreatePetRequest" }
+      responses:
+        "201":
+          description: Created. `Location` header points at the new resource.
+          headers:
+            Location: { schema: { type: string } }
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Pet" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /pets/{petId}:
+    get:
+      tags: [pets]
+      summary: Pet detail
+      security:
+        - sessionCookie: []
+        - {}
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      responses:
+        "200":
+          description: >
+            Visible to anyone if available/reserved; visible to the guardian regardless of
+            status; 404 otherwise (including "exists but not yours to see", per the deliberate
+            404-not-403 rule).
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Pet" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    patch:
+      tags: [pets]
+      summary: Update a listing (owner only)
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdatePetRequest" }
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Pet" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+    delete:
+      tags: [pets]
+      summary: Delete a listing (owner only). Cascades to its requests and favourites.
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      responses:
+        "204": { description: Deleted }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+  /pets/{petId}/status:
+    patch:
+      tags: [pets]
+      summary: Change a listing's status (owner only)
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { $ref: "#/components/schemas/PetStatus" }
+                declinePendingRequests:
+                  type: boolean
+                  default: true
+                  description: >
+                    When moving to `adopted`, also declines all pending requests for this pet in
+                    the same transaction.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Pet" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: >
+            Illegal transition. Legal transitions: available<->reserved,
+            available|reserved->adopted, any->withdrawn.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+
+  /me/pets:
+    get:
+      tags: [pets]
+      summary: My listings, all statuses
+      parameters:
+        - name: status
+          in: query
+          schema: { $ref: "#/components/schemas/PetStatus" }
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/perPage"
+        - name: sort
+          in: query
+          schema: { $ref: "#/components/schemas/PetSort" }
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/OwnedPet" }
+                  meta: { $ref: "#/components/schemas/PageMeta" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+
+  /uploads:
+    post:
+      tags: [uploads]
+      summary: Upload a single photo
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: JPEG/PNG/WebP, <= 5 MB. One file per request.
+      responses:
+        "201":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Upload" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "413":
+          description: File over 5 MB
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /pets/{petId}/adoption-requests:
+    post:
+      tags: [adoption-requests]
+      summary: Send an adoption request for a pet
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message: { type: string, minLength: 20, maxLength: 1000 }
+      responses:
+        "201":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdoptionRequest" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409":
+          description: >
+            Requesting your own pet; an existing pending/accepted request from you for this pet;
+            or the pet is adopted/withdrawn.
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+        "422": { $ref: "#/components/responses/ValidationError" }
+
+  /me/adoption-requests:
+    get:
+      tags: [adoption-requests]
+      summary: My adoption requests, as adopter or as guardian
+      parameters:
+        - name: role
+          in: query
+          required: true
+          schema: { $ref: "#/components/schemas/RequestRole" }
+          description: "`guardian` = requests received for my pets. `adopter` = requests I sent."
+        - name: status
+          in: query
+          schema: { $ref: "#/components/schemas/RequestStatus" }
+        - name: petId
+          in: query
+          schema: { type: string, format: uuid }
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/perPage"
+      responses:
+        "200":
+          description: "Default sort: pending first, then newest."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: "#/components/schemas/AdoptionRequest" }
+                  meta: { $ref: "#/components/schemas/PageMeta" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+
+  /adoption-requests/{requestId}:
+    get:
+      tags: [adoption-requests]
+      summary: A single adoption request (parties only)
+      parameters:
+        - $ref: "#/components/parameters/requestId"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdoptionRequest" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404":
+          description: Not found, or exists but you're not a party to it
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    delete:
+      tags: [adoption-requests]
+      summary: Withdraw a request (adopter only, only from pending)
+      parameters:
+        - $ref: "#/components/parameters/requestId"
+      responses:
+        "204": { description: "Withdrawn (soft delete: status -> withdrawn)" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: "Not pending" }
+
+  /adoption-requests/{requestId}/status:
+    patch:
+      tags: [adoption-requests]
+      summary: Accept or decline a request (guardian only)
+      parameters:
+        - $ref: "#/components/parameters/requestId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [accepted, declined]
+                reservePet:
+                  type: boolean
+                  default: false
+                  description: >
+                    When accepting, also moves the pet to `reserved` in the same transaction.
+      responses:
+        "200":
+          description: "On acceptance, `contact` becomes populated for both parties."
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AdoptionRequest" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+        "409": { description: "Only pending -> accepted|declined is legal" }
+
+  /me/favourites:
+    get:
+      tags: [favourites]
+      summary: My favourited pets
+      parameters:
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/perPage"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PaginatedPets" }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+
+  /me/favourites/{petId}:
+    put:
+      tags: [favourites]
+      summary: Favourite a pet (idempotent)
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      responses:
+        "204": { description: "Favourited. Also 204 if already favourited — never 409." }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    delete:
+      tags: [favourites]
+      summary: Unfavourite a pet (idempotent)
+      parameters:
+        - $ref: "#/components/parameters/petId"
+      responses:
+        "204": { description: Unfavourited }
+        "401": { $ref: "#/components/responses/Unauthenticated" }
+
+  /meta/breeds:
+    get:
+      tags: [meta]
+      summary: Breed suggestions for a species
+      description: >
+        Defined for forward compatibility; the MVP frontend ships a static list in
+        `shared/config/breeds.ts` and does not call this endpoint yet.
+      security: []
+      parameters:
+        - name: species
+          in: query
+          required: true
+          schema: { $ref: "#/components/schemas/Species" }
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items: { type: string }
+
+  /mock/reset:
+    post:
+      tags: [mock]
+      summary: Reseed the mock DB from the fixed seed (mock-only)
+      security: []
+      responses:
+        "200": { description: OK }
+
+  /mock/config:
+    post:
+      tags: [mock]
+      summary: Adjust mock behaviour knobs (mock-only)
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                latencyMs: { type: number }
+                errorRate: { type: number, minimum: 0, maximum: 1 }
+                failNextRequest: { type: boolean }
+      responses:
+        "200": { description: OK }
+
+  /mock/login-as:
+    post:
+      tags: [mock]
+      summary: Sign in as a seeded user without a password (mock-only)
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email]
+              properties:
+                email: { type: string }
+      responses:
+        "200":
+          description: Session cookie set
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SessionUser" }
+        "404": { $ref: "#/components/responses/NotFound" }
+
+components:
+  securitySchemes:
+    sessionCookie:
+      type: apiKey
+      in: cookie
+      name: adopta_session
+      description: httpOnly, SameSite=Lax, Secure in production, 30-day expiry.
+
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    petId:
+      name: petId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    requestId:
+      name: requestId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    perPage:
+      name: perPage
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 48, default: 12 }
+
+  responses:
+    Unauthenticated:
+      description: No session, or an expired one
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    Forbidden:
+      description: Authenticated but not permitted
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    NotFound:
+      description: Resource missing, or exists but not visible to this caller
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    ValidationError:
+      description: Semantic validation failure with field-level details
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+
+  schemas:
+    Species: { type: string, enum: [dog, cat, rabbit, bird, other] }
+    Sex: { type: string, enum: [male, female, unknown] }
+    Size: { type: string, enum: [small, medium, large] }
+    AgeGroup: { type: string, enum: [baby, young, adult, senior] }
+    PetStatus: { type: string, enum: [available, reserved, adopted, withdrawn] }
+    RequestStatus: { type: string, enum: [pending, accepted, declined, withdrawn] }
+    PetSort: { type: string, enum: [newest, oldest, name_asc] }
+    RequestRole: { type: string, enum: [adopter, guardian] }
+
+    ErrorCode:
+      type: string
+      enum:
+        - validation_error
+        - unauthenticated
+        - forbidden
+        - not_found
+        - conflict
+        - rate_limited
+        - internal_error
+
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { $ref: "#/components/schemas/ErrorCode" }
+            message:
+              type: string
+              description: >
+                Human-readable and safe to log, but not shown to the user — the frontend renders
+                its own copy keyed on `code`.
+            details:
+              type: array
+              description: Present only when code = validation_error
+              items:
+                type: object
+                required: [field, message]
+                properties:
+                  field:
+                    type: string
+                    description: "Dot/bracket path, e.g. photos[0].url"
+                  message: { type: string }
+
+    PageMeta:
+      type: object
+      required: [page, perPage, total, totalPages]
+      properties:
+        page: { type: integer }
+        perPage: { type: integer }
+        total: { type: integer }
+        totalPages: { type: integer }
+
+    UserSummary:
+      type: object
+      required: [id, name, city, avatarUrl, createdAt]
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string }
+        city: { type: string }
+        avatarUrl: { type: [string, "null"] }
+        createdAt: { type: string, format: date-time }
+
+    User:
+      allOf:
+        - $ref: "#/components/schemas/UserSummary"
+        - type: object
+          required: [bio, availablePetCount]
+          properties:
+            bio: { type: [string, "null"] }
+            availablePetCount: { type: integer }
+
+    SessionUser:
+      allOf:
+        - $ref: "#/components/schemas/User"
+        - type: object
+          required: [email, phone]
+          properties:
+            email: { type: string, format: email }
+            phone: { type: [string, "null"] }
+
+    PetPhoto:
+      type: object
+      required: [id, url, alt, width, height]
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        alt: { type: [string, "null"] }
+        width: { type: integer }
+        height: { type: integer }
+      description: Order in the containing array is meaningful — index 0 is the cover photo.
+
+    Pet:
+      type: object
+      required:
+        - id
+        - name
+        - species
+        - breed
+        - sex
+        - ageMonths
+        - size
+        - weightKg
+        - description
+        - photos
+        - city
+        - status
+        - isVaccinated
+        - isNeutered
+        - isGoodWithKids
+        - isGoodWithPets
+        - isFavourited
+        - viewerRequestStatus
+        - guardian
+        - createdAt
+        - updatedAt
+      properties:
+        id: { type: string, format: uuid }
+        name: { type: string, minLength: 2, maxLength: 40 }
+        species: { $ref: "#/components/schemas/Species" }
+        breed: { type: [string, "null"], maxLength: 60 }
+        sex: { $ref: "#/components/schemas/Sex" }
+        ageMonths: { type: integer, minimum: 0, maximum: 360 }
+        size: { $ref: "#/components/schemas/Size" }
+        weightKg: { type: [number, "null"], minimum: 0.1, maximum: 120 }
+        description: { type: string, minLength: 30, maxLength: 2000 }
+        photos:
+          type: array
+          minItems: 1
+          maxItems: 6
+          items: { $ref: "#/components/schemas/PetPhoto" }
+        city: { type: string, minLength: 2, maxLength: 80 }
+        status: { $ref: "#/components/schemas/PetStatus" }
+        isVaccinated: { type: boolean }
+        isNeutered: { type: boolean }
+        isGoodWithKids: { type: boolean }
+        isGoodWithPets: { type: boolean }
+        isFavourited:
+          type: boolean
+          description: Viewer-dependent. Always false for an anonymous caller.
+        viewerRequestStatus:
+          allOf: [{ $ref: "#/components/schemas/RequestStatus" }]
+          nullable: true
+          description: This viewer's own adoption request status for this pet, if any.
+        guardian: { $ref: "#/components/schemas/UserSummary" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+
+    OwnedPet:
+      allOf:
+        - $ref: "#/components/schemas/Pet"
+        - type: object
+          required: [pendingRequestCount]
+          properties:
+            pendingRequestCount: { type: integer }
+
+    PaginatedPets:
+      type: object
+      required: [items, meta]
+      properties:
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/Pet" }
+        meta: { $ref: "#/components/schemas/PageMeta" }
+
+    CreatePetRequest:
+      type: object
+      required:
+        - name
+        - species
+        - sex
+        - ageMonths
+        - size
+        - description
+        - city
+        - photos
+        - isVaccinated
+        - isNeutered
+        - isGoodWithKids
+        - isGoodWithPets
+      properties:
+        name: { type: string, minLength: 2, maxLength: 40 }
+        species: { $ref: "#/components/schemas/Species" }
+        breed: { type: [string, "null"], maxLength: 60 }
+        sex: { $ref: "#/components/schemas/Sex" }
+        ageMonths: { type: integer, minimum: 0, maximum: 360 }
+        size: { $ref: "#/components/schemas/Size" }
+        weightKg: { type: [number, "null"] }
+        description: { type: string, minLength: 30, maxLength: 2000 }
+        city: { type: string, minLength: 2, maxLength: 80 }
+        photos:
+          type: array
+          minItems: 1
+          maxItems: 6
+          items:
+            type: object
+            required: [uploadId]
+            properties:
+              uploadId:
+                type: string
+                description: Id returned by a prior POST /uploads
+              alt: { type: [string, "null"] }
+        isVaccinated: { type: boolean }
+        isNeutered: { type: boolean }
+        isGoodWithKids: { type: boolean }
+        isGoodWithPets: { type: boolean }
+      description: >
+        `status` is never accepted here — new pets are always created as `available`. Unknown or
+        already-consumed `uploadId`s are rejected with 422.
+
+    UpdatePetRequest:
+      type: object
+      description: >
+        Any subset of the CreatePetRequest fields. Sending `photos` replaces the whole array
+        (order included); omitting it leaves photos untouched. `status` is not settable here —
+        use PATCH /pets/{petId}/status.
+      properties:
+        name: { type: string, minLength: 2, maxLength: 40 }
+        species: { $ref: "#/components/schemas/Species" }
+        breed: { type: [string, "null"], maxLength: 60 }
+        sex: { $ref: "#/components/schemas/Sex" }
+        ageMonths: { type: integer, minimum: 0, maximum: 360 }
+        size: { $ref: "#/components/schemas/Size" }
+        weightKg: { type: [number, "null"] }
+        description: { type: string, minLength: 30, maxLength: 2000 }
+        city: { type: string, minLength: 2, maxLength: 80 }
+        photos:
+          type: array
+          minItems: 1
+          maxItems: 6
+          items:
+            type: object
+            required: [uploadId]
+            properties:
+              uploadId: { type: string }
+              alt: { type: [string, "null"] }
+        isVaccinated: { type: boolean }
+        isNeutered: { type: boolean }
+        isGoodWithKids: { type: boolean }
+        isGoodWithPets: { type: boolean }
+
+    Upload:
+      type: object
+      required: [id, url, width, height, byteSize]
+      properties:
+        id: { type: string, format: uuid }
+        url: { type: string, format: uri }
+        width: { type: integer }
+        height: { type: integer }
+        byteSize: { type: integer }
+
+    AdoptionRequest:
+      type: object
+      required:
+        - id
+        - status
+        - message
+        - pet
+        - adopter
+        - guardian
+        - contact
+        - createdAt
+        - respondedAt
+      properties:
+        id: { type: string, format: uuid }
+        status: { $ref: "#/components/schemas/RequestStatus" }
+        message: { type: string, minLength: 20, maxLength: 1000 }
+        pet:
+          type: object
+          required: [id, name, status, coverPhoto]
+          properties:
+            id: { type: string, format: uuid }
+            name: { type: string }
+            status: { $ref: "#/components/schemas/PetStatus" }
+            coverPhoto:
+              allOf: [{ $ref: "#/components/schemas/PetPhoto" }]
+              nullable: true
+        adopter: { $ref: "#/components/schemas/UserSummary" }
+        guardian: { $ref: "#/components/schemas/UserSummary" }
+        contact:
+          type: object
+          nullable: true
+          description: >
+            The counterparty's contact details. Present only when status = accepted, and only
+            visible to the two parties (adopter sees guardian's, guardian sees adopter's).
+          properties:
+            email: { type: string, format: email }
+            phone: { type: [string, "null"] }
+        createdAt: { type: string, format: date-time }
+        respondedAt: { type: [string, "null"], format: date-time }
