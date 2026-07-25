@@ -2,6 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { SiteHeader, useSession } from '~/features/auth'
+import { FavouriteButton } from '~/features/favourites/components/favourite-button'
 import { petDetailQuery } from '~/features/pets/api/pets.queries'
 import { GuardianSummary } from '~/features/pets/components/guardian-summary'
 import { PetGallery } from '~/features/pets/components/pet-gallery'
@@ -107,14 +108,28 @@ function PetDetailPage() {
             <GuardianSummary guardian={pet.guardian} />
 
             <div className="hidden flex-col gap-2 lg:flex">
-              <PetRequestCta pet={pet} viewer={user} />
+              <div className="flex items-center gap-3">
+                <PetRequestCta pet={pet} viewer={user} />
+                <FavouriteButton
+                  petId={pet.id}
+                  isFavourited={pet.isFavourited}
+                  redirectPath={`/pets/${pet.id}`}
+                />
+              </div>
             </div>
           </div>
         </div>
       </main>
 
-      <div className="fixed inset-x-0 bottom-0 border-t border-hairline bg-surface p-4 lg:hidden">
-        <PetRequestCta pet={pet} viewer={user} />
+      <div className="fixed inset-x-0 bottom-0 flex items-center gap-3 border-t border-hairline bg-surface p-4 lg:hidden">
+        <div className="flex-1">
+          <PetRequestCta pet={pet} viewer={user} />
+        </div>
+        <FavouriteButton
+          petId={pet.id}
+          isFavourited={pet.isFavourited}
+          redirectPath={`/pets/${pet.id}`}
+        />
       </div>
 
       <AppFooter />

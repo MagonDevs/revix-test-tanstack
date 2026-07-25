@@ -1,5 +1,7 @@
 import { Link } from '@tanstack/react-router'
 
+import { FavouriteButton } from '~/features/favourites/components/favourite-button'
+
 import { PetRecordStrip } from './pet-record-strip'
 import { PetStatusStamp } from './pet-status-stamp'
 
@@ -31,6 +33,12 @@ export function PetCard({ pet }: PetCardProps) {
         <PetStatusStamp
           status={pet.status}
           className="absolute left-2 top-2 bg-surface/90"
+        />
+        <FavouriteButton
+          petId={pet.id}
+          isFavourited={pet.isFavourited}
+          redirectPath={`/pets/${pet.id}`}
+          className="absolute right-2 top-2"
         />
       </div>
       <h3 className="truncate font-display text-base font-semibold text-ink">
