@@ -1,8 +1,14 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { getPetFn, getPetsFn, getUserFn, getUserPetsFn } from './pets.server'
+import {
+  getMyPetsFn,
+  getPetFn,
+  getPetsFn,
+  getUserFn,
+  getUserPetsFn,
+} from './pets.server'
 
-import type { PetListQuery } from '~/contracts'
+import type { MyPetsQuery, PetListQuery } from '~/contracts'
 
 export const petKeys = {
   all: ['pets'] as const,
@@ -12,6 +18,9 @@ export const petKeys = {
   detail: (petId: string) => [...petKeys.details(), petId] as const,
   byUser: (userId: string, query: { page?: number; perPage?: number }) =>
     [...petKeys.all, 'byUser', userId, query] as const,
+  mine: () => [...petKeys.all, 'mine'] as const,
+  mineList: (query: Partial<MyPetsQuery>) =>
+    [...petKeys.mine(), query] as const,
 } as const
 
 export const petListQuery = (
@@ -37,6 +46,19 @@ export const userPetsQuery = (
   queryOptions({
     queryKey: petKeys.byUser(userId, query),
     queryFn: () => getUserPetsFn({ data: { userId, ...query } }),
+  })
+
+/**
+ * Fetches the caller's own listings. Status tab counts are derived client-side
+ * from a single unfiltered call rather than firing one request per tab.
+ */
+export const myPetsQuery = (query: Partial<MyPetsQuery> = {}) =>
+  queryOptions({
+    queryKey: petKeys.mineList(query),
+    queryFn: () =>
+      getMyPetsFn({
+        data: { page: 1, perPage: 48, sort: 'newest', ...query },
+      }),
   })
 
 export const userKeys = {

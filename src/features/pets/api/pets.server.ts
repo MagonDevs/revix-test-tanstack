@@ -3,9 +3,15 @@ import { getRequestHeader } from '@tanstack/react-start/server'
 import { z } from 'zod'
 
 import {
+  createPet,
+  deletePet,
+  fetchMyPets,
   fetchPetById,
   fetchPets,
+  updatePet,
+  updatePetStatus,
 } from '~/server/api-client/endpoints/pets.endpoints'
+import { uploadFile } from '~/server/api-client/endpoints/uploads.endpoints'
 import {
   getUser,
   getUserPets,
@@ -14,7 +20,14 @@ import { withApiErrors } from '~/server/api-client/serialize-error'
 
 import { toPet } from '../model/pet.model'
 
-import { petListQuerySchema, idSchema } from '~/contracts'
+import {
+  petListQuerySchema,
+  idSchema,
+  myPetsQuerySchema,
+  createPetRequestSchema,
+  updatePetRequestSchema,
+  updatePetStatusRequestSchema,
+} from '~/contracts'
 
 function forwardedHeaders(): HeadersInit {
   const cookie = getRequestHeader('cookie')
@@ -60,5 +73,65 @@ export const getUserPetsFn = createServerFn({ method: 'GET' })
       const { userId, ...query } = data
       const page = await getUserPets(userId, query, forwardedHeaders())
       return { items: page.items.map(toPet), meta: page.meta }
+    }),
+  )
+
+export const getMyPetsFn = createServerFn({ method: 'GET' })
+  .inputValidator(myPetsQuerySchema)
+  .handler(
+    withApiErrors(async ({ data }) => {
+      const page = await fetchMyPets(data, forwardedHeaders())
+      return { items: page.items, meta: page.meta }
+    }),
+  )
+
+export const createPetFn = createServerFn({ method: 'POST' })
+  .inputValidator(createPetRequestSchema)
+  .handler(
+    withApiErrors(async ({ data }) => {
+      const dto = await createPet(data, forwardedHeaders())
+      return toPet(dto)
+    }),
+  )
+
+export const updatePetFn = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ petId: idSchema, body: updatePetRequestSchema }))
+  .handler(
+    withApiErrors(async ({ data }) => {
+      const dto = await updatePet(data.petId, data.body, forwardedHeaders())
+      return toPet(dto)
+    }),
+  )
+
+export const updatePetStatusFn = createServerFn({ method: 'POST' })
+  .inputValidator(
+    z.object({ petId: idSchema, body: updatePetStatusRequestSchema }),
+  )
+  .handler(
+    withApiErrors(async ({ data }) => {
+      const dto = await updatePetStatus(
+        data.petId,
+        data.body,
+        forwardedHeaders(),
+      )
+      return toPet(dto)
+    }),
+  )
+
+export const deletePetFn = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ petId: idSchema }))
+  .handler(
+    withApiErrors(async ({ data }) => {
+      await deletePet(data.petId, forwardedHeaders())
+      return { ok: true as const }
+    }),
+  )
+
+/** Accepts a single `file` field FormData — see uploads.endpoints.ts's passthrough. */
+export const uploadPhotoFn = createServerFn({ method: 'POST' })
+  .inputValidator((data: unknown) => data as FormData)
+  .handler(
+    withApiErrors(async ({ data }) => {
+      return await uploadFile(data, forwardedHeaders())
     }),
   )
