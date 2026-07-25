@@ -13,12 +13,14 @@ export interface UserMenuProps {
   name: string
   avatarUrl?: string
   pendingRequestCount?: number
+  onSignOut: () => void
 }
 
 export function UserMenu({
   name,
   avatarUrl,
   pendingRequestCount = 0,
+  onSignOut,
 }: UserMenuProps) {
   return (
     <DropdownMenuRoot>
@@ -49,7 +51,7 @@ export function UserMenu({
           <Link to="/dashboard/profile">Profile</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Sign out</DropdownMenuItem>
+        <DropdownMenuItem onSelect={onSignOut}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenuRoot>
   )

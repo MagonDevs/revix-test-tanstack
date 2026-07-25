@@ -9,6 +9,8 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { Toaster } from 'sonner'
 
+import { sessionQuery } from '~/features/auth'
+
 import { NotFound } from '~/shared/components/not-found'
 import { RootErrorBoundary } from '~/shared/components/root-error-boundary'
 
@@ -21,6 +23,9 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  // Prefetches the session so the header renders signed-in state on first
+  // paint (US-104) — no client-side flash from a loading -> loaded query.
+  loader: ({ context }) => context.queryClient.ensureQueryData(sessionQuery()),
   head: () => ({
     meta: [
       { charSet: 'utf-8' },

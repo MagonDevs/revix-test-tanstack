@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { SiteHeader } from '~/features/auth'
+
 import { AppFooter } from '~/shared/components/app-footer'
-import { AppHeader } from '~/shared/components/app-header'
 import { EmptyState } from '~/shared/components/empty-state'
 import { Avatar } from '~/shared/ui/avatar'
 import { MonoLabel } from '~/shared/ui/mono-label'
@@ -16,7 +17,7 @@ function UserProfilePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader />
+      <SiteHeader />
       <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-8 px-5 py-8">
         <div className="flex items-center gap-4">
           <Avatar name={`Guardian ${userId}`} size="lg" />

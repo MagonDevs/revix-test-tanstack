@@ -1,7 +1,7 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { LoginFormShell } from '~/shared/components/login-form-shell'
+import { LoginForm } from '~/features/auth'
 
 const loginSearchSchema = z.object({
   redirect: z.string().optional(),
@@ -15,11 +15,17 @@ export const Route = createFileRoute('/(auth)/login')({
 
 function LoginPage() {
   const { redirect } = Route.useSearch()
+  const navigate = useNavigate()
 
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-display text-xl font-semibold text-ink">Sign in</h1>
-      <LoginFormShell />
+      <LoginForm
+        onSuccess={() => {
+          // US-102: land on the `redirect` param if present, else /pets.
+          void navigate({ to: redirect ?? '/pets' })
+        }}
+      />
       <p className="font-mono text-xs uppercase tracking-[0.08em] text-mute">
         marta@example.com · password123
       </p>

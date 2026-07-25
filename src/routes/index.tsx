@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
+import { SiteHeader } from '~/features/auth'
+
 import { AppFooter } from '~/shared/components/app-footer'
-import { AppHeader } from '~/shared/components/app-header'
 import { Button } from '~/shared/ui/button'
 import { MonoLabel } from '~/shared/ui/mono-label'
 import { Skeleton } from '~/shared/ui/skeleton'
@@ -32,7 +33,7 @@ const HOW_IT_WORKS = [
 function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader />
+      <SiteHeader />
       <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-16 px-5 py-12">
         <section className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="flex flex-col gap-4">

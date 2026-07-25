@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 
+import { SiteHeader } from '~/features/auth'
+
 import { AppFooter } from '~/shared/components/app-footer'
-import { AppHeader } from '~/shared/components/app-header'
 import { PetDetailShell } from '~/shared/components/pet-detail-shell'
 
 export const Route = createFileRoute('/pets/$petId')({
@@ -14,7 +15,7 @@ function PetDetailPage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <AppHeader />
+      <SiteHeader />
       <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-6 px-5 py-8">
         <Link
           to="/pets"

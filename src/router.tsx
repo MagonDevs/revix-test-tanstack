@@ -2,6 +2,7 @@ import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 
 import { createQueryClient } from '~/shared/config/query-client'
+import { setRouterRef } from '~/shared/config/router-ref'
 
 import { routeTree } from './routeTree.gen'
 
@@ -17,6 +18,7 @@ export function getRouter() {
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient })
+  setRouterRef(router)
 
   return router
 }

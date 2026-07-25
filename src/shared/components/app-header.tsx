@@ -6,12 +6,27 @@ import { Button } from '~/shared/ui/button'
 import { SheetContent, SheetRoot, SheetTrigger } from '~/shared/ui/sheet'
 import { UserMenu } from '~/shared/components/user-menu'
 
-export interface AppHeaderProps {
-  /** TODO(phase-3): comes from the real session query once auth lands. */
-  isSignedIn?: boolean
+export interface AppHeaderUser {
+  name: string
+  avatarUrl?: string
 }
 
-export function AppHeader({ isSignedIn = false }: AppHeaderProps) {
+export interface AppHeaderProps {
+  /**
+   * Presentational only — `shared` may not import `features/auth`, so the
+   * route layer (`__root.tsx`) reads `useSession()` and passes the result
+   * down as plain props.
+   */
+  user?: AppHeaderUser
+  isSignedIn?: boolean
+  onSignOut?: () => void
+}
+
+export function AppHeader({
+  user,
+  isSignedIn = false,
+  onSignOut = () => {},
+}: AppHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
@@ -34,7 +49,14 @@ export function AppHeader({ isSignedIn = false }: AppHeaderProps) {
               <Button asChild variant="primary" size="sm">
                 <Link to="/dashboard/pets/new">Publish a pet</Link>
               </Button>
-              <UserMenu name="Marta Puig" pendingRequestCount={0} />
+              <UserMenu
+                name={user?.name ?? ''}
+                {...(user?.avatarUrl !== undefined
+                  ? { avatarUrl: user.avatarUrl }
+                  : {})}
+                pendingRequestCount={0}
+                onSignOut={onSignOut}
+              />
             </>
           ) : (
             <>
