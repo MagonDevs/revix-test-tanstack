@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #14181a;
+  --color-mute: #6a736d;
+  --color-hairline: #dde2dc;
+  --color-paper: #f5f7f4;
+  --color-surface: #ffffff;
+  --color-pine: #1e6a56;
+  --color-pine-hover: #175443;
+  --color-pine-tint: #eaf1ee;
+
+  --color-status-available: #1e6a56;
+  --color-status-reserved: #9a6b0f;
+  --color-status-adopted: #3c5a6b;
+  --color-status-withdrawn: #6a736d;
+  --color-status-declined: #a33b2c;
+
+  --font-display: 'Archivo', system-ui, sans-serif;
+  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --shadow-overlay: 0 8px 24px -8px rgb(20 24 26 / 0.16);
+  --shadow-raised: 0 1px 2px rgb(20 24 26 / 0.05);
+
+  --ease-out-fast: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-pine);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
