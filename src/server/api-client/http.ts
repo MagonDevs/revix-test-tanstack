@@ -11,13 +11,13 @@ type QueryValue =
 
 interface RequestConfig<TSchema extends z.ZodTypeAny | undefined> {
   path: string
-  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE'
+  method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
   query?: Record<string, QueryValue>
   body?: unknown
   /** Omit for 204 responses. */
   schema?: TSchema
   /** Forwarded from the incoming request so the API sees the session. */
-  headers?: HeadersInit
+  headers?: HeadersInit | undefined
   signal?: AbortSignal
 }
 
@@ -36,17 +36,22 @@ export async function apiRequest<
     else url.searchParams.set(key, String(value))
   }
 
+  const isFormData = body instanceof FormData
+
   const startedAt = performance.now()
   const init: RequestInit = {
     method,
     headers: {
       accept: 'application/json',
-      ...(body ? { 'content-type': 'application/json' } : {}),
+      // FormData bodies must not get a content-type: the browser sets the multipart boundary itself.
+      ...(body !== undefined && !isFormData
+        ? { 'content-type': 'application/json' }
+        : {}),
       ...headers,
     },
     signal: signal ?? AbortSignal.timeout(serverEnv.API_TIMEOUT_MS),
   }
-  if (body !== undefined) init.body = JSON.stringify(body)
+  if (body !== undefined) init.body = isFormData ? body : JSON.stringify(body)
 
   let response: Response
   try {

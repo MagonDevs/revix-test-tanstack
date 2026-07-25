@@ -1,5 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router'
 
+import { AppFooter } from '~/shared/components/app-footer'
+import { AppHeader } from '~/shared/components/app-header'
+import { PageHeader } from '~/shared/components/page-header'
+import { PetsBrowseShell } from '~/shared/components/pets-browse-shell'
+
 export const Route = createFileRoute('/pets/')({
   head: () => ({ meta: [{ title: 'Pets looking for a home · Adopta' }] }),
   component: PetsBrowsePage,
@@ -7,9 +12,13 @@ export const Route = createFileRoute('/pets/')({
 
 function PetsBrowsePage() {
   return (
-    <main className="p-8">
-      <h1 className="font-display text-3xl font-bold text-ink">Browse pets</h1>
-      <p className="mt-4 text-mute">Built in Phase 4.</p>
-    </main>
+    <div className="flex min-h-screen flex-col">
+      <AppHeader />
+      <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-6 px-5 py-8">
+        <PageHeader title="Browse pets" />
+        <PetsBrowseShell />
+      </main>
+      <AppFooter />
+    </div>
   )
 }

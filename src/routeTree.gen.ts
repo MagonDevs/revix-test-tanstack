@@ -10,43 +10,531 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as authRouteRouteImport } from './routes/(auth)/route'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as KitchenSinkRouteImport } from './routes/kitchen-sink'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authRegisterRouteImport } from './routes/(auth)/register'
 import { Route as PetsIndexRouteImport } from './routes/pets/index'
+import { Route as PetsPetIdRouteImport } from './routes/pets/$petId'
+import { Route as UsersUserIdRouteImport } from './routes/users/$userId'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
+import { Route as AuthenticatedDashboardFavouritesRouteImport } from './routes/_authenticated/dashboard/favourites'
+import { Route as AuthenticatedDashboardProfileRouteImport } from './routes/_authenticated/dashboard/profile'
+import { Route as AuthenticatedDashboardPetsIndexRouteImport } from './routes/_authenticated/dashboard/pets/index'
+import { Route as AuthenticatedDashboardPetsNewRouteImport } from './routes/_authenticated/dashboard/pets/new'
+import { Route as AuthenticatedDashboardRequestsReceivedRouteImport } from './routes/_authenticated/dashboard/requests/received'
+import { Route as AuthenticatedDashboardRequestsSentRouteImport } from './routes/_authenticated/dashboard/requests/sent'
+import { Route as ApiV1AdoptionRequestsRequestIdRouteImport } from './routes/api/v1/adoption-requests.$requestId'
+import { Route as ApiV1AuthLoginRouteImport } from './routes/api/v1/auth.login'
+import { Route as ApiV1AuthLogoutRouteImport } from './routes/api/v1/auth.logout'
+import { Route as ApiV1AuthRegisterRouteImport } from './routes/api/v1/auth.register'
+import { Route as ApiV1AuthSessionRouteImport } from './routes/api/v1/auth.session'
+import { Route as ApiV1MeAdoptionRequestsRouteImport } from './routes/api/v1/me.adoption-requests'
+import { Route as ApiV1MePetsRouteImport } from './routes/api/v1/me.pets'
+import { Route as ApiV1MetaBreedsRouteImport } from './routes/api/v1/meta.breeds'
+import { Route as ApiV1MockConfigRouteImport } from './routes/api/v1/mock.config'
+import { Route as ApiV1MockLoginAsRouteImport } from './routes/api/v1/mock.login-as'
+import { Route as ApiV1MockResetRouteImport } from './routes/api/v1/mock.reset'
+import { Route as ApiV1PetsIndexRouteImport } from './routes/api/v1/pets.index'
+import { Route as ApiV1PetsPetIdRouteImport } from './routes/api/v1/pets.$petId'
+import { Route as ApiV1UploadsIndexRouteImport } from './routes/api/v1/uploads.index'
+import { Route as ApiV1UsersUserIdRouteImport } from './routes/api/v1/users.$userId'
+import { Route as ApiV1UsersMeRouteImport } from './routes/api/v1/users.me'
+import { Route as AuthenticatedDashboardPetsPetIdEditRouteImport } from './routes/_authenticated/dashboard/pets/$petId.edit'
+import { Route as ApiV1AdoptionRequestsRequestIdStatusRouteImport } from './routes/api/v1/adoption-requests.$requestId.status'
+import { Route as ApiV1MeFavouritesIndexRouteImport } from './routes/api/v1/me.favourites.index'
+import { Route as ApiV1MeFavouritesPetIdRouteImport } from './routes/api/v1/me.favourites.$petId'
+import { Route as ApiV1PetsPetIdAdoptionRequestsRouteImport } from './routes/api/v1/pets.$petId.adoption-requests'
+import { Route as ApiV1PetsPetIdStatusRouteImport } from './routes/api/v1/pets.$petId.status'
+import { Route as ApiV1UploadsUploadIdRawRouteImport } from './routes/api/v1/uploads.$uploadId.raw'
+import { Route as ApiV1UsersUserIdPetsRouteImport } from './routes/api/v1/users.$userId.pets'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authRouteRoute = authRouteRouteImport.update({
+  id: '/(auth)',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KitchenSinkRoute = KitchenSinkRouteImport.update({
+  id: '/kitchen-sink',
+  path: '/kitchen-sink',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authRegisterRoute = authRegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => authRouteRoute,
+} as any)
 const PetsIndexRoute = PetsIndexRouteImport.update({
   id: '/pets/',
   path: '/pets/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PetsPetIdRoute = PetsPetIdRouteImport.update({
+  id: '/pets/$petId',
+  path: '/pets/$petId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsersUserIdRoute = UsersUserIdRouteImport.update({
+  id: '/users/$userId',
+  path: '/users/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardFavouritesRoute =
+  AuthenticatedDashboardFavouritesRouteImport.update({
+    id: '/dashboard/favourites',
+    path: '/dashboard/favourites',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardProfileRoute =
+  AuthenticatedDashboardProfileRouteImport.update({
+    id: '/dashboard/profile',
+    path: '/dashboard/profile',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardPetsIndexRoute =
+  AuthenticatedDashboardPetsIndexRouteImport.update({
+    id: '/dashboard/pets/',
+    path: '/dashboard/pets/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardPetsNewRoute =
+  AuthenticatedDashboardPetsNewRouteImport.update({
+    id: '/dashboard/pets/new',
+    path: '/dashboard/pets/new',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardRequestsReceivedRoute =
+  AuthenticatedDashboardRequestsReceivedRouteImport.update({
+    id: '/dashboard/requests/received',
+    path: '/dashboard/requests/received',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDashboardRequestsSentRoute =
+  AuthenticatedDashboardRequestsSentRouteImport.update({
+    id: '/dashboard/requests/sent',
+    path: '/dashboard/requests/sent',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const ApiV1AdoptionRequestsRequestIdRoute =
+  ApiV1AdoptionRequestsRequestIdRouteImport.update({
+    id: '/api/v1/adoption-requests/$requestId',
+    path: '/api/v1/adoption-requests/$requestId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiV1AuthLoginRoute = ApiV1AuthLoginRouteImport.update({
+  id: '/api/v1/auth/login',
+  path: '/api/v1/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1AuthLogoutRoute = ApiV1AuthLogoutRouteImport.update({
+  id: '/api/v1/auth/logout',
+  path: '/api/v1/auth/logout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1AuthRegisterRoute = ApiV1AuthRegisterRouteImport.update({
+  id: '/api/v1/auth/register',
+  path: '/api/v1/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1AuthSessionRoute = ApiV1AuthSessionRouteImport.update({
+  id: '/api/v1/auth/session',
+  path: '/api/v1/auth/session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MeAdoptionRequestsRoute = ApiV1MeAdoptionRequestsRouteImport.update({
+  id: '/api/v1/me/adoption-requests',
+  path: '/api/v1/me/adoption-requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MePetsRoute = ApiV1MePetsRouteImport.update({
+  id: '/api/v1/me/pets',
+  path: '/api/v1/me/pets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MetaBreedsRoute = ApiV1MetaBreedsRouteImport.update({
+  id: '/api/v1/meta/breeds',
+  path: '/api/v1/meta/breeds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MockConfigRoute = ApiV1MockConfigRouteImport.update({
+  id: '/api/v1/mock/config',
+  path: '/api/v1/mock/config',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MockLoginAsRoute = ApiV1MockLoginAsRouteImport.update({
+  id: '/api/v1/mock/login-as',
+  path: '/api/v1/mock/login-as',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MockResetRoute = ApiV1MockResetRouteImport.update({
+  id: '/api/v1/mock/reset',
+  path: '/api/v1/mock/reset',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1PetsIndexRoute = ApiV1PetsIndexRouteImport.update({
+  id: '/api/v1/pets/',
+  path: '/api/v1/pets/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1PetsPetIdRoute = ApiV1PetsPetIdRouteImport.update({
+  id: '/api/v1/pets/$petId',
+  path: '/api/v1/pets/$petId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1UploadsIndexRoute = ApiV1UploadsIndexRouteImport.update({
+  id: '/api/v1/uploads/',
+  path: '/api/v1/uploads/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1UsersUserIdRoute = ApiV1UsersUserIdRouteImport.update({
+  id: '/api/v1/users/$userId',
+  path: '/api/v1/users/$userId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1UsersMeRoute = ApiV1UsersMeRouteImport.update({
+  id: '/api/v1/users/me',
+  path: '/api/v1/users/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedDashboardPetsPetIdEditRoute =
+  AuthenticatedDashboardPetsPetIdEditRouteImport.update({
+    id: '/dashboard/pets/$petId/edit',
+    path: '/dashboard/pets/$petId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const ApiV1AdoptionRequestsRequestIdStatusRoute =
+  ApiV1AdoptionRequestsRequestIdStatusRouteImport.update({
+    id: '/status',
+    path: '/status',
+    getParentRoute: () => ApiV1AdoptionRequestsRequestIdRoute,
+  } as any)
+const ApiV1MeFavouritesIndexRoute = ApiV1MeFavouritesIndexRouteImport.update({
+  id: '/api/v1/me/favourites/',
+  path: '/api/v1/me/favourites/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1MeFavouritesPetIdRoute = ApiV1MeFavouritesPetIdRouteImport.update({
+  id: '/api/v1/me/favourites/$petId',
+  path: '/api/v1/me/favourites/$petId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1PetsPetIdAdoptionRequestsRoute =
+  ApiV1PetsPetIdAdoptionRequestsRouteImport.update({
+    id: '/adoption-requests',
+    path: '/adoption-requests',
+    getParentRoute: () => ApiV1PetsPetIdRoute,
+  } as any)
+const ApiV1PetsPetIdStatusRoute = ApiV1PetsPetIdStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => ApiV1PetsPetIdRoute,
+} as any)
+const ApiV1UploadsUploadIdRawRoute = ApiV1UploadsUploadIdRawRouteImport.update({
+  id: '/api/v1/uploads/$uploadId/raw',
+  path: '/api/v1/uploads/$uploadId/raw',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiV1UsersUserIdPetsRoute = ApiV1UsersUserIdPetsRouteImport.update({
+  id: '/pets',
+  path: '/pets',
+  getParentRoute: () => ApiV1UsersUserIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/kitchen-sink': typeof KitchenSinkRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/pets/$petId': typeof PetsPetIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/pets/': typeof PetsIndexRoute
+  '/dashboard/favourites': typeof AuthenticatedDashboardFavouritesRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/pets/new': typeof AuthenticatedDashboardPetsNewRoute
+  '/dashboard/requests/received': typeof AuthenticatedDashboardRequestsReceivedRoute
+  '/dashboard/requests/sent': typeof AuthenticatedDashboardRequestsSentRoute
+  '/api/v1/adoption-requests/$requestId': typeof ApiV1AdoptionRequestsRequestIdRouteWithChildren
+  '/api/v1/auth/login': typeof ApiV1AuthLoginRoute
+  '/api/v1/auth/logout': typeof ApiV1AuthLogoutRoute
+  '/api/v1/auth/register': typeof ApiV1AuthRegisterRoute
+  '/api/v1/auth/session': typeof ApiV1AuthSessionRoute
+  '/api/v1/me/adoption-requests': typeof ApiV1MeAdoptionRequestsRoute
+  '/api/v1/me/pets': typeof ApiV1MePetsRoute
+  '/api/v1/meta/breeds': typeof ApiV1MetaBreedsRoute
+  '/api/v1/mock/config': typeof ApiV1MockConfigRoute
+  '/api/v1/mock/login-as': typeof ApiV1MockLoginAsRoute
+  '/api/v1/mock/reset': typeof ApiV1MockResetRoute
+  '/api/v1/pets/$petId': typeof ApiV1PetsPetIdRouteWithChildren
+  '/api/v1/users/$userId': typeof ApiV1UsersUserIdRouteWithChildren
+  '/api/v1/users/me': typeof ApiV1UsersMeRoute
+  '/dashboard/pets/': typeof AuthenticatedDashboardPetsIndexRoute
+  '/api/v1/pets/': typeof ApiV1PetsIndexRoute
+  '/api/v1/uploads/': typeof ApiV1UploadsIndexRoute
+  '/dashboard/pets/$petId/edit': typeof AuthenticatedDashboardPetsPetIdEditRoute
+  '/api/v1/adoption-requests/$requestId/status': typeof ApiV1AdoptionRequestsRequestIdStatusRoute
+  '/api/v1/me/favourites/$petId': typeof ApiV1MeFavouritesPetIdRoute
+  '/api/v1/pets/$petId/adoption-requests': typeof ApiV1PetsPetIdAdoptionRequestsRoute
+  '/api/v1/pets/$petId/status': typeof ApiV1PetsPetIdStatusRoute
+  '/api/v1/uploads/$uploadId/raw': typeof ApiV1UploadsUploadIdRawRoute
+  '/api/v1/users/$userId/pets': typeof ApiV1UsersUserIdPetsRoute
+  '/api/v1/me/favourites/': typeof ApiV1MeFavouritesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/kitchen-sink': typeof KitchenSinkRoute
+  '/login': typeof authLoginRoute
+  '/register': typeof authRegisterRoute
+  '/pets/$petId': typeof PetsPetIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/pets': typeof PetsIndexRoute
+  '/dashboard/favourites': typeof AuthenticatedDashboardFavouritesRoute
+  '/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/dashboard/pets/new': typeof AuthenticatedDashboardPetsNewRoute
+  '/dashboard/requests/received': typeof AuthenticatedDashboardRequestsReceivedRoute
+  '/dashboard/requests/sent': typeof AuthenticatedDashboardRequestsSentRoute
+  '/api/v1/adoption-requests/$requestId': typeof ApiV1AdoptionRequestsRequestIdRouteWithChildren
+  '/api/v1/auth/login': typeof ApiV1AuthLoginRoute
+  '/api/v1/auth/logout': typeof ApiV1AuthLogoutRoute
+  '/api/v1/auth/register': typeof ApiV1AuthRegisterRoute
+  '/api/v1/auth/session': typeof ApiV1AuthSessionRoute
+  '/api/v1/me/adoption-requests': typeof ApiV1MeAdoptionRequestsRoute
+  '/api/v1/me/pets': typeof ApiV1MePetsRoute
+  '/api/v1/meta/breeds': typeof ApiV1MetaBreedsRoute
+  '/api/v1/mock/config': typeof ApiV1MockConfigRoute
+  '/api/v1/mock/login-as': typeof ApiV1MockLoginAsRoute
+  '/api/v1/mock/reset': typeof ApiV1MockResetRoute
+  '/api/v1/pets/$petId': typeof ApiV1PetsPetIdRouteWithChildren
+  '/api/v1/users/$userId': typeof ApiV1UsersUserIdRouteWithChildren
+  '/api/v1/users/me': typeof ApiV1UsersMeRoute
+  '/dashboard/pets': typeof AuthenticatedDashboardPetsIndexRoute
+  '/api/v1/pets': typeof ApiV1PetsIndexRoute
+  '/api/v1/uploads': typeof ApiV1UploadsIndexRoute
+  '/dashboard/pets/$petId/edit': typeof AuthenticatedDashboardPetsPetIdEditRoute
+  '/api/v1/adoption-requests/$requestId/status': typeof ApiV1AdoptionRequestsRequestIdStatusRoute
+  '/api/v1/me/favourites/$petId': typeof ApiV1MeFavouritesPetIdRoute
+  '/api/v1/pets/$petId/adoption-requests': typeof ApiV1PetsPetIdAdoptionRequestsRoute
+  '/api/v1/pets/$petId/status': typeof ApiV1PetsPetIdStatusRoute
+  '/api/v1/uploads/$uploadId/raw': typeof ApiV1UploadsUploadIdRawRoute
+  '/api/v1/users/$userId/pets': typeof ApiV1UsersUserIdPetsRoute
+  '/api/v1/me/favourites': typeof ApiV1MeFavouritesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/(auth)': typeof authRouteRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/kitchen-sink': typeof KitchenSinkRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/register': typeof authRegisterRoute
+  '/pets/$petId': typeof PetsPetIdRoute
+  '/users/$userId': typeof UsersUserIdRoute
   '/pets/': typeof PetsIndexRoute
+  '/_authenticated/dashboard/favourites': typeof AuthenticatedDashboardFavouritesRoute
+  '/_authenticated/dashboard/profile': typeof AuthenticatedDashboardProfileRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/_authenticated/dashboard/pets/new': typeof AuthenticatedDashboardPetsNewRoute
+  '/_authenticated/dashboard/requests/received': typeof AuthenticatedDashboardRequestsReceivedRoute
+  '/_authenticated/dashboard/requests/sent': typeof AuthenticatedDashboardRequestsSentRoute
+  '/api/v1/adoption-requests/$requestId': typeof ApiV1AdoptionRequestsRequestIdRouteWithChildren
+  '/api/v1/auth/login': typeof ApiV1AuthLoginRoute
+  '/api/v1/auth/logout': typeof ApiV1AuthLogoutRoute
+  '/api/v1/auth/register': typeof ApiV1AuthRegisterRoute
+  '/api/v1/auth/session': typeof ApiV1AuthSessionRoute
+  '/api/v1/me/adoption-requests': typeof ApiV1MeAdoptionRequestsRoute
+  '/api/v1/me/pets': typeof ApiV1MePetsRoute
+  '/api/v1/meta/breeds': typeof ApiV1MetaBreedsRoute
+  '/api/v1/mock/config': typeof ApiV1MockConfigRoute
+  '/api/v1/mock/login-as': typeof ApiV1MockLoginAsRoute
+  '/api/v1/mock/reset': typeof ApiV1MockResetRoute
+  '/api/v1/pets/$petId': typeof ApiV1PetsPetIdRouteWithChildren
+  '/api/v1/users/$userId': typeof ApiV1UsersUserIdRouteWithChildren
+  '/api/v1/users/me': typeof ApiV1UsersMeRoute
+  '/_authenticated/dashboard/pets/': typeof AuthenticatedDashboardPetsIndexRoute
+  '/api/v1/pets/': typeof ApiV1PetsIndexRoute
+  '/api/v1/uploads/': typeof ApiV1UploadsIndexRoute
+  '/_authenticated/dashboard/pets/$petId/edit': typeof AuthenticatedDashboardPetsPetIdEditRoute
+  '/api/v1/adoption-requests/$requestId/status': typeof ApiV1AdoptionRequestsRequestIdStatusRoute
+  '/api/v1/me/favourites/$petId': typeof ApiV1MeFavouritesPetIdRoute
+  '/api/v1/pets/$petId/adoption-requests': typeof ApiV1PetsPetIdAdoptionRequestsRoute
+  '/api/v1/pets/$petId/status': typeof ApiV1PetsPetIdStatusRoute
+  '/api/v1/uploads/$uploadId/raw': typeof ApiV1UploadsUploadIdRawRoute
+  '/api/v1/users/$userId/pets': typeof ApiV1UsersUserIdPetsRoute
+  '/api/v1/me/favourites/': typeof ApiV1MeFavouritesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pets/'
+  fullPaths:
+    | '/'
+    | '/kitchen-sink'
+    | '/login'
+    | '/register'
+    | '/pets/$petId'
+    | '/users/$userId'
+    | '/pets/'
+    | '/dashboard/favourites'
+    | '/dashboard/profile'
+    | '/dashboard/'
+    | '/dashboard/pets/new'
+    | '/dashboard/requests/received'
+    | '/dashboard/requests/sent'
+    | '/api/v1/adoption-requests/$requestId'
+    | '/api/v1/auth/login'
+    | '/api/v1/auth/logout'
+    | '/api/v1/auth/register'
+    | '/api/v1/auth/session'
+    | '/api/v1/me/adoption-requests'
+    | '/api/v1/me/pets'
+    | '/api/v1/meta/breeds'
+    | '/api/v1/mock/config'
+    | '/api/v1/mock/login-as'
+    | '/api/v1/mock/reset'
+    | '/api/v1/pets/$petId'
+    | '/api/v1/users/$userId'
+    | '/api/v1/users/me'
+    | '/dashboard/pets/'
+    | '/api/v1/pets/'
+    | '/api/v1/uploads/'
+    | '/dashboard/pets/$petId/edit'
+    | '/api/v1/adoption-requests/$requestId/status'
+    | '/api/v1/me/favourites/$petId'
+    | '/api/v1/pets/$petId/adoption-requests'
+    | '/api/v1/pets/$petId/status'
+    | '/api/v1/uploads/$uploadId/raw'
+    | '/api/v1/users/$userId/pets'
+    | '/api/v1/me/favourites/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pets'
-  id: '__root__' | '/' | '/pets/'
+  to:
+    | '/'
+    | '/kitchen-sink'
+    | '/login'
+    | '/register'
+    | '/pets/$petId'
+    | '/users/$userId'
+    | '/pets'
+    | '/dashboard/favourites'
+    | '/dashboard/profile'
+    | '/dashboard'
+    | '/dashboard/pets/new'
+    | '/dashboard/requests/received'
+    | '/dashboard/requests/sent'
+    | '/api/v1/adoption-requests/$requestId'
+    | '/api/v1/auth/login'
+    | '/api/v1/auth/logout'
+    | '/api/v1/auth/register'
+    | '/api/v1/auth/session'
+    | '/api/v1/me/adoption-requests'
+    | '/api/v1/me/pets'
+    | '/api/v1/meta/breeds'
+    | '/api/v1/mock/config'
+    | '/api/v1/mock/login-as'
+    | '/api/v1/mock/reset'
+    | '/api/v1/pets/$petId'
+    | '/api/v1/users/$userId'
+    | '/api/v1/users/me'
+    | '/dashboard/pets'
+    | '/api/v1/pets'
+    | '/api/v1/uploads'
+    | '/dashboard/pets/$petId/edit'
+    | '/api/v1/adoption-requests/$requestId/status'
+    | '/api/v1/me/favourites/$petId'
+    | '/api/v1/pets/$petId/adoption-requests'
+    | '/api/v1/pets/$petId/status'
+    | '/api/v1/uploads/$uploadId/raw'
+    | '/api/v1/users/$userId/pets'
+    | '/api/v1/me/favourites'
+  id:
+    | '__root__'
+    | '/'
+    | '/(auth)'
+    | '/_authenticated'
+    | '/kitchen-sink'
+    | '/(auth)/login'
+    | '/(auth)/register'
+    | '/pets/$petId'
+    | '/users/$userId'
+    | '/pets/'
+    | '/_authenticated/dashboard/favourites'
+    | '/_authenticated/dashboard/profile'
+    | '/_authenticated/dashboard/'
+    | '/_authenticated/dashboard/pets/new'
+    | '/_authenticated/dashboard/requests/received'
+    | '/_authenticated/dashboard/requests/sent'
+    | '/api/v1/adoption-requests/$requestId'
+    | '/api/v1/auth/login'
+    | '/api/v1/auth/logout'
+    | '/api/v1/auth/register'
+    | '/api/v1/auth/session'
+    | '/api/v1/me/adoption-requests'
+    | '/api/v1/me/pets'
+    | '/api/v1/meta/breeds'
+    | '/api/v1/mock/config'
+    | '/api/v1/mock/login-as'
+    | '/api/v1/mock/reset'
+    | '/api/v1/pets/$petId'
+    | '/api/v1/users/$userId'
+    | '/api/v1/users/me'
+    | '/_authenticated/dashboard/pets/'
+    | '/api/v1/pets/'
+    | '/api/v1/uploads/'
+    | '/_authenticated/dashboard/pets/$petId/edit'
+    | '/api/v1/adoption-requests/$requestId/status'
+    | '/api/v1/me/favourites/$petId'
+    | '/api/v1/pets/$petId/adoption-requests'
+    | '/api/v1/pets/$petId/status'
+    | '/api/v1/uploads/$uploadId/raw'
+    | '/api/v1/users/$userId/pets'
+    | '/api/v1/me/favourites/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  authRouteRoute: typeof authRouteRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  KitchenSinkRoute: typeof KitchenSinkRoute
+  PetsPetIdRoute: typeof PetsPetIdRoute
+  UsersUserIdRoute: typeof UsersUserIdRoute
   PetsIndexRoute: typeof PetsIndexRoute
+  ApiV1AdoptionRequestsRequestIdRoute: typeof ApiV1AdoptionRequestsRequestIdRouteWithChildren
+  ApiV1AuthLoginRoute: typeof ApiV1AuthLoginRoute
+  ApiV1AuthLogoutRoute: typeof ApiV1AuthLogoutRoute
+  ApiV1AuthRegisterRoute: typeof ApiV1AuthRegisterRoute
+  ApiV1AuthSessionRoute: typeof ApiV1AuthSessionRoute
+  ApiV1MeAdoptionRequestsRoute: typeof ApiV1MeAdoptionRequestsRoute
+  ApiV1MePetsRoute: typeof ApiV1MePetsRoute
+  ApiV1MetaBreedsRoute: typeof ApiV1MetaBreedsRoute
+  ApiV1MockConfigRoute: typeof ApiV1MockConfigRoute
+  ApiV1MockLoginAsRoute: typeof ApiV1MockLoginAsRoute
+  ApiV1MockResetRoute: typeof ApiV1MockResetRoute
+  ApiV1PetsPetIdRoute: typeof ApiV1PetsPetIdRouteWithChildren
+  ApiV1UsersUserIdRoute: typeof ApiV1UsersUserIdRouteWithChildren
+  ApiV1UsersMeRoute: typeof ApiV1UsersMeRoute
+  ApiV1PetsIndexRoute: typeof ApiV1PetsIndexRoute
+  ApiV1UploadsIndexRoute: typeof ApiV1UploadsIndexRoute
+  ApiV1MeFavouritesPetIdRoute: typeof ApiV1MeFavouritesPetIdRoute
+  ApiV1UploadsUploadIdRawRoute: typeof ApiV1UploadsUploadIdRawRoute
+  ApiV1MeFavouritesIndexRoute: typeof ApiV1MeFavouritesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +546,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)': {
+      id: '/(auth)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof authRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kitchen-sink': {
+      id: '/kitchen-sink'
+      path: '/kitchen-sink'
+      fullPath: '/kitchen-sink'
+      preLoaderRoute: typeof KitchenSinkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/register': {
+      id: '/(auth)/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/pets/': {
       id: '/pets/'
       path: '/pets'
@@ -65,12 +588,351 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PetsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pets/$petId': {
+      id: '/pets/$petId'
+      path: '/pets/$petId'
+      fullPath: '/pets/$petId'
+      preLoaderRoute: typeof PetsPetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/users/$userId': {
+      id: '/users/$userId'
+      path: '/users/$userId'
+      fullPath: '/users/$userId'
+      preLoaderRoute: typeof UsersUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/favourites': {
+      id: '/_authenticated/dashboard/favourites'
+      path: '/dashboard/favourites'
+      fullPath: '/dashboard/favourites'
+      preLoaderRoute: typeof AuthenticatedDashboardFavouritesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/profile': {
+      id: '/_authenticated/dashboard/profile'
+      path: '/dashboard/profile'
+      fullPath: '/dashboard/profile'
+      preLoaderRoute: typeof AuthenticatedDashboardProfileRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/pets/': {
+      id: '/_authenticated/dashboard/pets/'
+      path: '/dashboard/pets'
+      fullPath: '/dashboard/pets/'
+      preLoaderRoute: typeof AuthenticatedDashboardPetsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/pets/new': {
+      id: '/_authenticated/dashboard/pets/new'
+      path: '/dashboard/pets/new'
+      fullPath: '/dashboard/pets/new'
+      preLoaderRoute: typeof AuthenticatedDashboardPetsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/requests/received': {
+      id: '/_authenticated/dashboard/requests/received'
+      path: '/dashboard/requests/received'
+      fullPath: '/dashboard/requests/received'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestsReceivedRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard/requests/sent': {
+      id: '/_authenticated/dashboard/requests/sent'
+      path: '/dashboard/requests/sent'
+      fullPath: '/dashboard/requests/sent'
+      preLoaderRoute: typeof AuthenticatedDashboardRequestsSentRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/v1/adoption-requests/$requestId': {
+      id: '/api/v1/adoption-requests/$requestId'
+      path: '/api/v1/adoption-requests/$requestId'
+      fullPath: '/api/v1/adoption-requests/$requestId'
+      preLoaderRoute: typeof ApiV1AdoptionRequestsRequestIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/auth/login': {
+      id: '/api/v1/auth/login'
+      path: '/api/v1/auth/login'
+      fullPath: '/api/v1/auth/login'
+      preLoaderRoute: typeof ApiV1AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/auth/logout': {
+      id: '/api/v1/auth/logout'
+      path: '/api/v1/auth/logout'
+      fullPath: '/api/v1/auth/logout'
+      preLoaderRoute: typeof ApiV1AuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/auth/register': {
+      id: '/api/v1/auth/register'
+      path: '/api/v1/auth/register'
+      fullPath: '/api/v1/auth/register'
+      preLoaderRoute: typeof ApiV1AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/auth/session': {
+      id: '/api/v1/auth/session'
+      path: '/api/v1/auth/session'
+      fullPath: '/api/v1/auth/session'
+      preLoaderRoute: typeof ApiV1AuthSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/me/adoption-requests': {
+      id: '/api/v1/me/adoption-requests'
+      path: '/api/v1/me/adoption-requests'
+      fullPath: '/api/v1/me/adoption-requests'
+      preLoaderRoute: typeof ApiV1MeAdoptionRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/me/pets': {
+      id: '/api/v1/me/pets'
+      path: '/api/v1/me/pets'
+      fullPath: '/api/v1/me/pets'
+      preLoaderRoute: typeof ApiV1MePetsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/meta/breeds': {
+      id: '/api/v1/meta/breeds'
+      path: '/api/v1/meta/breeds'
+      fullPath: '/api/v1/meta/breeds'
+      preLoaderRoute: typeof ApiV1MetaBreedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/mock/config': {
+      id: '/api/v1/mock/config'
+      path: '/api/v1/mock/config'
+      fullPath: '/api/v1/mock/config'
+      preLoaderRoute: typeof ApiV1MockConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/mock/login-as': {
+      id: '/api/v1/mock/login-as'
+      path: '/api/v1/mock/login-as'
+      fullPath: '/api/v1/mock/login-as'
+      preLoaderRoute: typeof ApiV1MockLoginAsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/mock/reset': {
+      id: '/api/v1/mock/reset'
+      path: '/api/v1/mock/reset'
+      fullPath: '/api/v1/mock/reset'
+      preLoaderRoute: typeof ApiV1MockResetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/pets/': {
+      id: '/api/v1/pets/'
+      path: '/api/v1/pets'
+      fullPath: '/api/v1/pets/'
+      preLoaderRoute: typeof ApiV1PetsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/pets/$petId': {
+      id: '/api/v1/pets/$petId'
+      path: '/api/v1/pets/$petId'
+      fullPath: '/api/v1/pets/$petId'
+      preLoaderRoute: typeof ApiV1PetsPetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/uploads/': {
+      id: '/api/v1/uploads/'
+      path: '/api/v1/uploads'
+      fullPath: '/api/v1/uploads/'
+      preLoaderRoute: typeof ApiV1UploadsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/users/$userId': {
+      id: '/api/v1/users/$userId'
+      path: '/api/v1/users/$userId'
+      fullPath: '/api/v1/users/$userId'
+      preLoaderRoute: typeof ApiV1UsersUserIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/users/me': {
+      id: '/api/v1/users/me'
+      path: '/api/v1/users/me'
+      fullPath: '/api/v1/users/me'
+      preLoaderRoute: typeof ApiV1UsersMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/pets/$petId/edit': {
+      id: '/_authenticated/dashboard/pets/$petId/edit'
+      path: '/dashboard/pets/$petId/edit'
+      fullPath: '/dashboard/pets/$petId/edit'
+      preLoaderRoute: typeof AuthenticatedDashboardPetsPetIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/v1/adoption-requests/$requestId/status': {
+      id: '/api/v1/adoption-requests/$requestId/status'
+      path: '/status'
+      fullPath: '/api/v1/adoption-requests/$requestId/status'
+      preLoaderRoute: typeof ApiV1AdoptionRequestsRequestIdStatusRouteImport
+      parentRoute: typeof ApiV1AdoptionRequestsRequestIdRoute
+    }
+    '/api/v1/me/favourites/': {
+      id: '/api/v1/me/favourites/'
+      path: '/api/v1/me/favourites'
+      fullPath: '/api/v1/me/favourites/'
+      preLoaderRoute: typeof ApiV1MeFavouritesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/me/favourites/$petId': {
+      id: '/api/v1/me/favourites/$petId'
+      path: '/api/v1/me/favourites/$petId'
+      fullPath: '/api/v1/me/favourites/$petId'
+      preLoaderRoute: typeof ApiV1MeFavouritesPetIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/pets/$petId/adoption-requests': {
+      id: '/api/v1/pets/$petId/adoption-requests'
+      path: '/adoption-requests'
+      fullPath: '/api/v1/pets/$petId/adoption-requests'
+      preLoaderRoute: typeof ApiV1PetsPetIdAdoptionRequestsRouteImport
+      parentRoute: typeof ApiV1PetsPetIdRoute
+    }
+    '/api/v1/pets/$petId/status': {
+      id: '/api/v1/pets/$petId/status'
+      path: '/status'
+      fullPath: '/api/v1/pets/$petId/status'
+      preLoaderRoute: typeof ApiV1PetsPetIdStatusRouteImport
+      parentRoute: typeof ApiV1PetsPetIdRoute
+    }
+    '/api/v1/uploads/$uploadId/raw': {
+      id: '/api/v1/uploads/$uploadId/raw'
+      path: '/api/v1/uploads/$uploadId/raw'
+      fullPath: '/api/v1/uploads/$uploadId/raw'
+      preLoaderRoute: typeof ApiV1UploadsUploadIdRawRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/v1/users/$userId/pets': {
+      id: '/api/v1/users/$userId/pets'
+      path: '/pets'
+      fullPath: '/api/v1/users/$userId/pets'
+      preLoaderRoute: typeof ApiV1UsersUserIdPetsRouteImport
+      parentRoute: typeof ApiV1UsersUserIdRoute
+    }
   }
 }
 
+interface authRouteRouteChildren {
+  authLoginRoute: typeof authLoginRoute
+  authRegisterRoute: typeof authRegisterRoute
+}
+
+const authRouteRouteChildren: authRouteRouteChildren = {
+  authLoginRoute: authLoginRoute,
+  authRegisterRoute: authRegisterRoute,
+}
+
+const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
+  authRouteRouteChildren,
+)
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedDashboardFavouritesRoute: typeof AuthenticatedDashboardFavouritesRoute
+  AuthenticatedDashboardProfileRoute: typeof AuthenticatedDashboardProfileRoute
+  AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
+  AuthenticatedDashboardPetsNewRoute: typeof AuthenticatedDashboardPetsNewRoute
+  AuthenticatedDashboardRequestsReceivedRoute: typeof AuthenticatedDashboardRequestsReceivedRoute
+  AuthenticatedDashboardRequestsSentRoute: typeof AuthenticatedDashboardRequestsSentRoute
+  AuthenticatedDashboardPetsIndexRoute: typeof AuthenticatedDashboardPetsIndexRoute
+  AuthenticatedDashboardPetsPetIdEditRoute: typeof AuthenticatedDashboardPetsPetIdEditRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedDashboardFavouritesRoute: AuthenticatedDashboardFavouritesRoute,
+  AuthenticatedDashboardProfileRoute: AuthenticatedDashboardProfileRoute,
+  AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
+  AuthenticatedDashboardPetsNewRoute: AuthenticatedDashboardPetsNewRoute,
+  AuthenticatedDashboardRequestsReceivedRoute:
+    AuthenticatedDashboardRequestsReceivedRoute,
+  AuthenticatedDashboardRequestsSentRoute:
+    AuthenticatedDashboardRequestsSentRoute,
+  AuthenticatedDashboardPetsIndexRoute: AuthenticatedDashboardPetsIndexRoute,
+  AuthenticatedDashboardPetsPetIdEditRoute:
+    AuthenticatedDashboardPetsPetIdEditRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
+interface ApiV1AdoptionRequestsRequestIdRouteChildren {
+  ApiV1AdoptionRequestsRequestIdStatusRoute: typeof ApiV1AdoptionRequestsRequestIdStatusRoute
+}
+
+const ApiV1AdoptionRequestsRequestIdRouteChildren: ApiV1AdoptionRequestsRequestIdRouteChildren =
+  {
+    ApiV1AdoptionRequestsRequestIdStatusRoute:
+      ApiV1AdoptionRequestsRequestIdStatusRoute,
+  }
+
+const ApiV1AdoptionRequestsRequestIdRouteWithChildren =
+  ApiV1AdoptionRequestsRequestIdRoute._addFileChildren(
+    ApiV1AdoptionRequestsRequestIdRouteChildren,
+  )
+
+interface ApiV1PetsPetIdRouteChildren {
+  ApiV1PetsPetIdAdoptionRequestsRoute: typeof ApiV1PetsPetIdAdoptionRequestsRoute
+  ApiV1PetsPetIdStatusRoute: typeof ApiV1PetsPetIdStatusRoute
+}
+
+const ApiV1PetsPetIdRouteChildren: ApiV1PetsPetIdRouteChildren = {
+  ApiV1PetsPetIdAdoptionRequestsRoute: ApiV1PetsPetIdAdoptionRequestsRoute,
+  ApiV1PetsPetIdStatusRoute: ApiV1PetsPetIdStatusRoute,
+}
+
+const ApiV1PetsPetIdRouteWithChildren = ApiV1PetsPetIdRoute._addFileChildren(
+  ApiV1PetsPetIdRouteChildren,
+)
+
+interface ApiV1UsersUserIdRouteChildren {
+  ApiV1UsersUserIdPetsRoute: typeof ApiV1UsersUserIdPetsRoute
+}
+
+const ApiV1UsersUserIdRouteChildren: ApiV1UsersUserIdRouteChildren = {
+  ApiV1UsersUserIdPetsRoute: ApiV1UsersUserIdPetsRoute,
+}
+
+const ApiV1UsersUserIdRouteWithChildren =
+  ApiV1UsersUserIdRoute._addFileChildren(ApiV1UsersUserIdRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  authRouteRoute: authRouteRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  KitchenSinkRoute: KitchenSinkRoute,
+  PetsPetIdRoute: PetsPetIdRoute,
+  UsersUserIdRoute: UsersUserIdRoute,
   PetsIndexRoute: PetsIndexRoute,
+  ApiV1AdoptionRequestsRequestIdRoute:
+    ApiV1AdoptionRequestsRequestIdRouteWithChildren,
+  ApiV1AuthLoginRoute: ApiV1AuthLoginRoute,
+  ApiV1AuthLogoutRoute: ApiV1AuthLogoutRoute,
+  ApiV1AuthRegisterRoute: ApiV1AuthRegisterRoute,
+  ApiV1AuthSessionRoute: ApiV1AuthSessionRoute,
+  ApiV1MeAdoptionRequestsRoute: ApiV1MeAdoptionRequestsRoute,
+  ApiV1MePetsRoute: ApiV1MePetsRoute,
+  ApiV1MetaBreedsRoute: ApiV1MetaBreedsRoute,
+  ApiV1MockConfigRoute: ApiV1MockConfigRoute,
+  ApiV1MockLoginAsRoute: ApiV1MockLoginAsRoute,
+  ApiV1MockResetRoute: ApiV1MockResetRoute,
+  ApiV1PetsPetIdRoute: ApiV1PetsPetIdRouteWithChildren,
+  ApiV1UsersUserIdRoute: ApiV1UsersUserIdRouteWithChildren,
+  ApiV1UsersMeRoute: ApiV1UsersMeRoute,
+  ApiV1PetsIndexRoute: ApiV1PetsIndexRoute,
+  ApiV1UploadsIndexRoute: ApiV1UploadsIndexRoute,
+  ApiV1MeFavouritesPetIdRoute: ApiV1MeFavouritesPetIdRoute,
+  ApiV1UploadsUploadIdRawRoute: ApiV1UploadsUploadIdRawRoute,
+  ApiV1MeFavouritesIndexRoute: ApiV1MeFavouritesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

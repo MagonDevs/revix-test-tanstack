@@ -109,7 +109,9 @@ export default tseslint.config(
             },
             { from: 'server', allow: ['contracts', 'shared'] },
             { from: 'shared', allow: ['shared', 'contracts'] },
-            { from: 'mocks', allow: ['contracts', 'shared'] },
+            // `mocks` is a stand-in backend, not app code: it legitimately needs to speak
+            // the same ApiError vocabulary the real http client parses (`~/server/api-client/api-error`).
+            { from: 'mocks', allow: ['contracts', 'shared', 'server'] },
           ],
         },
       ],

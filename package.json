@@ -19,6 +19,9 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@fontsource/archivo": "5.2.6",
+    "@fontsource/ibm-plex-mono": "5.2.6",
+    "@fontsource/ibm-plex-sans": "5.2.6",
     "@tailwindcss/vite": "4.3.3",
     "@tanstack/react-devtools": "0.10.9",
     "@tanstack/react-form": "1.33.2",

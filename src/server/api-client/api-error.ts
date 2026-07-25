@@ -51,6 +51,16 @@ export class ApiError extends Error {
     )
   }
 
+  /** Used by the mock backend to raise a real ApiError from a handler — the same class the http client throws. */
+  static create(
+    status: number,
+    code: ApiErrorCode,
+    message: string,
+    details?: FieldError[],
+  ): ApiError {
+    return new ApiError(status, code, message, details)
+  }
+
   static network(cause: unknown): ApiError {
     const error = new ApiError(0, 'internal_error', 'Network request failed')
     error.cause = cause
