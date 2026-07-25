@@ -28,7 +28,10 @@ export const profileFormSchema = z.object({
     .trim()
     .max(500, 'Bio must be 500 characters or fewer.')
     .nullable(),
+  // Display only — the avatar preview. Never sent to the API; see `avatarUploadId`.
   avatarUrl: z.string().nullable(),
+  // Set after a successful photo upload; the id (not the URL) is what the API accepts.
+  avatarUploadId: z.string().nullable().optional(),
 })
 export type ProfileFormValues = z.infer<typeof profileFormSchema>
 
@@ -39,6 +42,7 @@ export function toProfileFormValues(user: SessionUserDto): ProfileFormValues {
     phone: user.phone,
     bio: user.bio,
     avatarUrl: user.avatarUrl,
+    avatarUploadId: undefined,
   }
 }
 
@@ -48,11 +52,17 @@ export function toUpdateUserRequest(
   initialValues: ProfileFormValues,
 ): UpdateUserRequest {
   const diff: UpdateUserRequest = {}
-  for (const key of Object.keys(values) as Array<keyof ProfileFormValues>) {
+  const diffableKeys = ['name', 'city', 'phone', 'bio'] as const
+  for (const key of diffableKeys) {
     if (values[key] !== initialValues[key]) {
       // @ts-expect-error -- each field's value type matches its own key.
       diff[key] = values[key]
     }
+  }
+  // avatarUploadId isn't diffed against an initial value — it's only ever set
+  // once a new photo has been uploaded, so its presence alone means "send it".
+  if (values.avatarUploadId !== undefined) {
+    diff.avatarUploadId = values.avatarUploadId
   }
   return diff
 }

@@ -12,6 +12,7 @@ const VALID = {
   phone: null,
   bio: null,
   avatarUrl: null,
+  avatarUploadId: undefined,
 }
 
 describe('profileFormSchema', () => {
@@ -111,6 +112,7 @@ describe('toProfileFormValues', () => {
       phone: '600000000',
       bio: 'Hi',
       avatarUrl: null,
+      avatarUploadId: undefined,
     })
   })
 })
@@ -124,5 +126,33 @@ describe('toUpdateUserRequest', () => {
   it('returns an empty diff when nothing changed', () => {
     const diff = toUpdateUserRequest(VALID, VALID)
     expect(diff).toEqual({})
+  })
+
+  it('never includes avatarUrl — only avatarUploadId is sent to the API', () => {
+    const diff = toUpdateUserRequest(
+      { ...VALID, avatarUrl: 'https://example.com/new.png' },
+      VALID,
+    )
+    expect(diff).toEqual({})
+  })
+
+  it('includes avatarUploadId once a photo has been uploaded', () => {
+    const diff = toUpdateUserRequest(
+      {
+        ...VALID,
+        avatarUrl: 'https://example.com/new.png',
+        avatarUploadId: 'up_1',
+      },
+      VALID,
+    )
+    expect(diff).toEqual({ avatarUploadId: 'up_1' })
+  })
+
+  it('sends null to clear the avatar', () => {
+    const diff = toUpdateUserRequest(
+      { ...VALID, avatarUrl: null, avatarUploadId: null },
+      VALID,
+    )
+    expect(diff).toEqual({ avatarUploadId: null })
   })
 })

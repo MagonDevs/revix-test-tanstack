@@ -48,6 +48,7 @@ export function ProfileForm({ user }: ProfileFormProps) {
     phone: user.phone,
     bio: user.bio,
     avatarUrl: user.avatarUrl,
+    avatarUploadId: undefined,
   }
 
   const formLike = {
@@ -85,7 +86,10 @@ export function ProfileForm({ user }: ProfileFormProps) {
     const file = fileList?.[0]
     if (!file) return
     uploadPhoto.mutate(file, {
-      onSuccess: (dto) => form.setFieldValue('avatarUrl', dto.url),
+      onSuccess: (dto) => {
+        form.setFieldValue('avatarUrl', dto.url)
+        form.setFieldValue('avatarUploadId', dto.id)
+      },
       onError: () => toast.error('Photo upload failed.'),
     })
   }

@@ -34,13 +34,38 @@ export async function updateMe(ctx: { request: Request }): Promise<Response> {
     'Your profile could not be saved.',
   )
 
+  // `avatarUploadId`, not `avatarUrl`: resolve the owned upload's URL server-side
+  // (mirrors the real API — R-15, avatarUploadId must belong to the caller).
+  let avatarUrl: string | null | undefined
+  if (body.avatarUploadId !== undefined) {
+    if (body.avatarUploadId === null) {
+      avatarUrl = null
+    } else {
+      const upload = db.uploads.get(body.avatarUploadId)
+      if (!upload || upload.ownerId !== viewer.id) {
+        throw ApiError.create(
+          422,
+          'validation_error',
+          'Your profile could not be saved.',
+          [
+            {
+              field: 'avatarUploadId',
+              message: 'Upload not found or not owned by you',
+            },
+          ],
+        )
+      }
+      avatarUrl = upload.url
+    }
+  }
+
   const updated = mutate(db.users, viewer.id, (current) => ({
     ...current,
     ...(body.name !== undefined ? { name: body.name } : {}),
     ...(body.city !== undefined ? { city: body.city } : {}),
     ...(body.phone !== undefined ? { phone: body.phone } : {}),
     ...(body.bio !== undefined ? { bio: body.bio } : {}),
-    ...(body.avatarUrl !== undefined ? { avatarUrl: body.avatarUrl } : {}),
+    ...(avatarUrl !== undefined ? { avatarUrl } : {}),
   }))
 
   return jsonResponse(toSessionUserDto(updated))
