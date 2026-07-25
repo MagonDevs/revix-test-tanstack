@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
-import { requestKeys } from '~/features/adoption-requests/api/adoption-requests.queries'
+import { requestKeys } from '~/features/adoption-requests'
 
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 import { toast } from '~/shared/ui/toast'

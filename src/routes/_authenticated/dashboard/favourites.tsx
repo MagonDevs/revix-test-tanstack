@@ -3,7 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
 import { FavouriteCard } from '~/features/favourites'
-import { favouritesQuery } from '~/features/favourites/api/favourites.queries'
+import { favouritesQuery } from '~/features/favourites'
 
 import { EmptyState } from '~/shared/components/empty-state'
 import { ErrorState } from '~/shared/components/error-state'

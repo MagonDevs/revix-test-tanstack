@@ -1,7 +1,7 @@
 import { X } from 'lucide-react'
 
-import { PetCard } from '~/features/pets/components/pet-card'
-import type { Pet } from '~/features/pets/model/pet.model'
+import { PetCard } from '~/features/pets'
+import type { Pet } from '~/features/pets'
 
 import { Button } from '~/shared/ui/button'
 

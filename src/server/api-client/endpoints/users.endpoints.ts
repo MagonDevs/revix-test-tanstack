@@ -1,5 +1,3 @@
-import { apiRequest } from '../http'
-
 import {
   paginatedSchema,
   petDtoSchema,
@@ -7,6 +5,8 @@ import {
   userDtoSchema,
   sessionUserDtoSchema,
 } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function getUser(userId: string, headers?: HeadersInit) {
   return apiRequest({

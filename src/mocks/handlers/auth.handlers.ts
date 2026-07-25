@@ -1,5 +1,7 @@
 import { ApiError } from '~/server/api-client/api-error'
 
+import { loginRequestSchema, registerRequestSchema } from '~/contracts'
+
 import { toSessionUserDto } from '../mappers'
 import {
   db,
@@ -18,8 +20,6 @@ import {
   setCookieHeader,
 } from '../session'
 import { parseOrThrow } from '../validation'
-
-import { loginRequestSchema, registerRequestSchema } from '~/contracts'
 
 export async function register(ctx: { request: Request }): Promise<Response> {
   const { name, email, password, city } = parseOrThrow(

@@ -1,7 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { useRef, useState } from 'react'
 
-import { useUploadPhoto } from '~/features/pets/api/pets.mutations'
+import { useUploadPhoto } from '~/features/pets'
 
 import { Avatar } from '~/shared/ui/avatar'
 import { Button } from '~/shared/ui/button'

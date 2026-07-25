@@ -43,7 +43,13 @@ export default tseslint.config(
     },
     settings: {
       react: { version: 'detect' },
+      'import/resolver': { typescript: true },
+      'boundaries/files': [
+        { category: 'serverfns', pattern: '**/*.serverfns.ts' },
+      ],
       'boundaries/elements': [
+        // Mock API routes are matched before the generic route element.
+        { type: 'api-routes', pattern: 'src/routes/api/**' },
         { type: 'routes', pattern: 'src/routes/**' },
         { type: 'feature', pattern: 'src/features/*', capture: ['slice'] },
         { type: 'server', pattern: 'src/server/**' },
@@ -93,31 +99,64 @@ export default tseslint.config(
           'newlines-between': 'always',
         },
       ],
-      'boundaries/element-types': [
+      'boundaries/dependencies': [
         'error',
         {
           default: 'disallow',
-          rules: [
-            { from: 'routes', allow: ['feature', 'shared', 'contracts'] },
+          policies: [
             {
-              from: 'feature',
-              allow: [
-                ['feature', { slice: '${from.slice}' }],
-                'shared',
-                'contracts',
-              ],
+              from: { element: { type: 'routes' } },
+              allow: {
+                to: { element: { type: ['feature', 'shared', 'contracts'] } },
+              },
             },
-            { from: 'server', allow: ['contracts', 'shared'] },
-            { from: 'shared', allow: ['shared', 'contracts'] },
-            { from: 'mocks', allow: ['contracts', 'shared', 'server'] },
+            {
+              from: { element: { type: 'api-routes' } },
+              allow: {
+                to: {
+                  element: {
+                    type: ['mocks', 'server', 'shared', 'contracts'],
+                  },
+                },
+              },
+            },
+            // Only *.serverfns.ts may reach into src/server.
+            {
+              from: {
+                element: { type: 'feature' },
+                file: { categories: 'serverfns' },
+              },
+              allow: { to: { element: { type: 'server' } } },
+            },
+            {
+              from: { element: { type: 'feature' } },
+              allow: {
+                to: { element: { type: ['feature', 'shared', 'contracts'] } },
+              },
+            },
+            {
+              from: { element: { type: 'server' } },
+              allow: { to: { element: { type: ['contracts', 'shared'] } } },
+            },
+            {
+              from: { element: { type: 'shared' } },
+              allow: { to: { element: { type: ['shared', 'contracts'] } } },
+            },
+            {
+              from: { element: { type: 'mocks' } },
+              allow: {
+                to: { element: { type: ['contracts', 'shared', 'server'] } },
+              },
+            },
+            // Features are reachable only through their public entry point.
+            {
+              disallow: {
+                to: {
+                  element: { type: 'feature', fileInternalPath: '!index.ts' },
+                },
+              },
+            },
           ],
-        },
-      ],
-      'boundaries/entry-point': [
-        'error',
-        {
-          default: 'disallow',
-          rules: [{ target: ['feature'], allow: 'index.ts' }],
         },
       ],
       'no-restricted-imports': [

@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import type { CreatePetRequest, UpdatePetRequest } from '~/contracts'
-
 import { sexSchema, sizeSchema, speciesSchema } from '~/contracts'
+
+import type { CreatePetRequest, UpdatePetRequest } from '~/contracts'
 
 export const petPhotoFormSchema = z.object({
   localId: z.string(),

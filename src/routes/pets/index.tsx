@@ -3,13 +3,15 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 
 import { SiteHeader } from '~/features/auth'
-import { petListQuery } from '~/features/pets/api/pets.queries'
-import { PetFilterChips } from '~/features/pets/components/pet-filter-chips'
-import { PetFilters } from '~/features/pets/components/pet-filters'
-import { PetGrid } from '~/features/pets/components/pet-grid'
-import { PetSortSelect } from '~/features/pets/components/pet-sort-select'
-import { useUpdatePetSearch } from '~/features/pets/hooks/use-pet-search-params'
-import { petSearchSchema } from '~/features/pets/schemas/pet-search.schema'
+import {
+  petListQuery,
+  PetFilterChips,
+  PetFilters,
+  PetGrid,
+  PetSortSelect,
+  useUpdatePetSearch,
+  petSearchSchema,
+} from '~/features/pets'
 
 import { useDebouncedValue } from '~/shared/hooks/use-debounced-value'
 import { AppFooter } from '~/shared/components/app-footer'

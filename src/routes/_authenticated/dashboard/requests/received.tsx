@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { requestsQuery } from '~/features/adoption-requests/api/adoption-requests.queries'
-import { RequestPanel } from '~/features/adoption-requests/components/request-panel'
+import { requestsQuery, RequestPanel } from '~/features/adoption-requests'
 
 import { EmptyState } from '~/shared/components/empty-state'
 import { PageHeader } from '~/shared/components/page-header'

@@ -1,6 +1,6 @@
-import { apiRequest } from '../http'
-
 import { uploadDtoSchema } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function uploadFile(body: FormData, headers?: HeadersInit) {
   return apiRequest({

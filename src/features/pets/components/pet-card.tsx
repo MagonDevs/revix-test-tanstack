@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 
-import { FavouriteButton } from '~/features/favourites/components/favourite-button'
+import { FavouriteButton } from '~/features/favourites'
 
 import { PetRecordStrip } from './pet-record-strip'
 import { PetStatusStamp } from './pet-status-stamp'

@@ -2,8 +2,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { SiteHeader } from '~/features/auth'
-import { petListQuery } from '~/features/pets/api/pets.queries'
-import { PetCard } from '~/features/pets/components/pet-card'
+import { petListQuery, PetCard } from '~/features/pets'
 
 import { AppFooter } from '~/shared/components/app-footer'
 import { Button } from '~/shared/ui/button'

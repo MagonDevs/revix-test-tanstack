@@ -1,6 +1,6 @@
-import { apiRequest } from '../http'
-
 import { paginatedSchema, petDtoSchema } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function fetchFavourites(
   query: { page?: number; perPage?: number },

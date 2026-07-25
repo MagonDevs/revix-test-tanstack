@@ -1,6 +1,16 @@
 // @vitest-environment node
 import { beforeEach, describe, expect, it } from 'vitest'
 
+import {
+  adoptionRequestDtoSchema,
+  apiErrorBodySchema,
+  paginatedSchema,
+  petDtoSchema,
+  sessionUserDtoSchema,
+  uploadDtoSchema,
+  userDtoSchema,
+} from '~/contracts'
+
 import { db, resetDb } from '../repository'
 import { handleMockError } from '../response'
 import { seedDb } from '../seed'
@@ -17,16 +27,6 @@ import { getBreeds } from './meta.handlers'
 import { createPet, getPet, listMyPets, listPets } from './pets.handlers'
 import { createUpload } from './uploads.handlers'
 import { getUser, getUserPets } from './users.handlers'
-
-import {
-  adoptionRequestDtoSchema,
-  apiErrorBodySchema,
-  paginatedSchema,
-  petDtoSchema,
-  sessionUserDtoSchema,
-  uploadDtoSchema,
-  userDtoSchema,
-} from '~/contracts'
 
 async function call<T>(fn: () => T | Promise<T>): Promise<Response> {
   try {

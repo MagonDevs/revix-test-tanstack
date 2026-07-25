@@ -1,6 +1,6 @@
-import { jsonResponse } from '../response'
-
 import { speciesSchema } from '~/contracts'
+
+import { jsonResponse } from '../response'
 
 const BREEDS_BY_SPECIES: Record<string, string[]> = {
   dog: ['Podenco mix', 'Labrador', 'Galgo', 'Mestizo', 'Pastor alemán'],

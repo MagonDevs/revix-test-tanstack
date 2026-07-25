@@ -2,8 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { z } from 'zod'
 
-import { myPetsQuery } from '~/features/pets/api/pets.queries'
-import { PetListingRow } from '~/features/pets/components/pet-listing-row'
+import { myPetsQuery, PetListingRow } from '~/features/pets'
 
 import { EmptyState } from '~/shared/components/empty-state'
 import { PageHeader } from '~/shared/components/page-header'

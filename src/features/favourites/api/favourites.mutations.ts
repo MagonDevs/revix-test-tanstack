@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
-import { petKeys } from '~/features/pets/api/pets.queries'
-import type { Pet } from '~/features/pets/model/pet.model'
+import { petKeys } from '~/features/pets'
+import type { Pet } from '~/features/pets'
 
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 

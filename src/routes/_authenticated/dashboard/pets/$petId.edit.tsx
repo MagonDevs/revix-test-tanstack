@@ -2,10 +2,8 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-import { useDeletePet } from '~/features/pets/api/pets.mutations'
-import { petDetailQuery } from '~/features/pets/api/pets.queries'
-import { PetForm } from '~/features/pets/components/pet-form'
-import type { PetFormValues } from '~/features/pets/schemas/pet-form.schema'
+import { useDeletePet, petDetailQuery, PetForm } from '~/features/pets'
+import type { PetFormValues } from '~/features/pets'
 
 import { ConfirmDialog } from '~/shared/components/confirm-dialog'
 import { EmptyState } from '~/shared/components/empty-state'

@@ -1,5 +1,3 @@
-import { apiRequest } from '../http'
-
 import {
   type CreatePetRequest,
   type MyPetsQuery,
@@ -10,6 +8,8 @@ import {
   type UpdatePetRequest,
   type UpdatePetStatusRequest,
 } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function fetchPets(query: PetListQuery, headers?: HeadersInit) {
   return apiRequest({

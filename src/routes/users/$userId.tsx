@@ -3,8 +3,7 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import { z } from 'zod'
 
 import { SiteHeader } from '~/features/auth'
-import { userPetsQuery, userQuery } from '~/features/pets/api/pets.queries'
-import { PetGrid } from '~/features/pets/components/pet-grid'
+import { userPetsQuery, userQuery, PetGrid } from '~/features/pets'
 
 import { AppFooter } from '~/shared/components/app-footer'
 import { EmptyState } from '~/shared/components/empty-state'

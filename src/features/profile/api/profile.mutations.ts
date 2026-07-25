@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { authKeys } from '~/features/auth'
-import { userKeys } from '~/features/pets/api/pets.queries'
+import { userKeys } from '~/features/pets'
 
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 import { toast } from '~/shared/ui/toast'

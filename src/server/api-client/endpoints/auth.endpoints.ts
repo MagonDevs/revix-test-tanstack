@@ -1,10 +1,10 @@
-import { apiRequest } from '../http'
-
 import {
   type LoginRequest,
   type RegisterRequest,
   sessionUserDtoSchema,
 } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function register(body: RegisterRequest, headers?: HeadersInit) {
   return apiRequest({

@@ -2,14 +2,16 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { SiteHeader, useSession } from '~/features/auth'
-import { FavouriteButton } from '~/features/favourites/components/favourite-button'
-import { petDetailQuery } from '~/features/pets/api/pets.queries'
-import { GuardianSummary } from '~/features/pets/components/guardian-summary'
-import { PetGallery } from '~/features/pets/components/pet-gallery'
-import { PetRecord } from '~/features/pets/components/pet-record'
-import { PetRequestCta } from '~/features/pets/components/pet-request-cta'
-import { PetStatusStamp } from '~/features/pets/components/pet-status-stamp'
-import { PetTraits } from '~/features/pets/components/pet-traits'
+import { FavouriteButton } from '~/features/favourites'
+import {
+  petDetailQuery,
+  GuardianSummary,
+  PetGallery,
+  PetRecord,
+  PetRequestCta,
+  PetStatusStamp,
+  PetTraits,
+} from '~/features/pets'
 
 import { AppFooter } from '~/shared/components/app-footer'
 import { EmptyState } from '~/shared/components/empty-state'

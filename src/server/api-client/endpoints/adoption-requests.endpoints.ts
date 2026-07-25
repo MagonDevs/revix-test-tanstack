@@ -1,5 +1,3 @@
-import { apiRequest } from '../http'
-
 import {
   adoptionRequestDtoSchema,
   type AdoptionRequestListQuery,
@@ -7,6 +5,8 @@ import {
   paginatedSchema,
   type RespondToRequestRequest,
 } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 export function createAdoptionRequest(
   petId: string,

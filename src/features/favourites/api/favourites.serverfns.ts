@@ -9,7 +9,7 @@ import {
 } from '~/server/api-client/endpoints/favourites.endpoints'
 import { withApiErrors } from '~/server/api-client/serialize-error'
 
-import { toPet } from '~/features/pets/model/pet.model'
+import { toPet } from '~/features/pets'
 
 import { idSchema } from '~/contracts'
 

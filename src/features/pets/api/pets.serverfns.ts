@@ -18,8 +18,6 @@ import {
 } from '~/server/api-client/endpoints/users.endpoints'
 import { withApiErrors } from '~/server/api-client/serialize-error'
 
-import { toPet } from '../model/pet.model'
-
 import {
   petListQuerySchema,
   idSchema,
@@ -28,6 +26,8 @@ import {
   updatePetRequestSchema,
   updatePetStatusRequestSchema,
 } from '~/contracts'
+
+import { toPet } from '../model/pet.model'
 
 function forwardedHeaders(): HeadersInit {
   const cookie = getRequestHeader('cookie')

@@ -1,8 +1,8 @@
 import { z } from 'zod'
 
-import { apiRequest } from '../http'
-
 import { speciesSchema } from '~/contracts'
+
+import { apiRequest } from '../http'
 
 const breedsResponseSchema = z.object({ items: z.array(z.string()) })
 

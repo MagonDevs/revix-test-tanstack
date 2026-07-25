@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
 
-import { RequestDialog } from '~/features/adoption-requests/components/request-dialog'
+import { RequestDialog } from '~/features/adoption-requests'
 
 import { Button } from '~/shared/ui/button'
 

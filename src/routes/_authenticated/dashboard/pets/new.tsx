@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
-import { PetForm } from '~/features/pets/components/pet-form'
-import { createEmptyPetFormValues } from '~/features/pets/schemas/pet-form.schema'
+import { PetForm, createEmptyPetFormValues } from '~/features/pets'
 
 import { PageHeader } from '~/shared/components/page-header'
 

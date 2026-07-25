@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
-import { pendingReceivedCountQuery } from '~/features/adoption-requests/api/adoption-requests.queries'
+import { pendingReceivedCountQuery } from '~/features/adoption-requests'
 import { sessionQuery, SiteHeader } from '~/features/auth'
 
 import { AppFooter } from '~/shared/components/app-footer'

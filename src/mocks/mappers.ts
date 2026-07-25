@@ -1,3 +1,5 @@
+import { AGE_GROUP_MONTHS } from '~/contracts'
+
 import { db } from './repository'
 
 import type {
@@ -15,8 +17,6 @@ import type {
   StoredUpload,
   StoredUser,
 } from './repository'
-
-import { AGE_GROUP_MONTHS } from '~/contracts'
 
 export function toUserSummaryDto(user: StoredUser): UserSummaryDto {
   return {

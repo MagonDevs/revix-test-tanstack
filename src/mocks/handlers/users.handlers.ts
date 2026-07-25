@@ -1,13 +1,13 @@
 import { ApiError } from '~/server/api-client/api-error'
 
+import { updateUserRequestSchema } from '~/contracts'
+
 import { toPetDto, toSessionUserDto, toUserDto } from '../mappers'
 import { db, mutate } from '../repository'
 import { jsonResponse, readJsonBody } from '../response'
 import { requireAuth } from '../auth-guard'
 import { paginate, parsePageParams } from '../pagination'
 import { parseOrThrow } from '../validation'
-
-import { updateUserRequestSchema } from '~/contracts'
 
 export function getUser(ctx: { params: { userId: string } }): Response {
   const user = db.users.get(ctx.params.userId)

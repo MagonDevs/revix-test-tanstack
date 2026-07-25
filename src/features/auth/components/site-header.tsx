@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { pendingReceivedCountQuery } from '~/features/adoption-requests/api/adoption-requests.queries'
+import { pendingReceivedCountQuery } from '~/features/adoption-requests'
 
 import { AppHeader } from '~/shared/components/app-header'
 
