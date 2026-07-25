@@ -7,7 +7,7 @@
     "dev": "vite dev --port 3000",
     "generate-routes": "tsr generate",
     "build": "vite build",
-    "start": "node dist/server/server.js",
+    "start": "node server.entry.mjs",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
@@ -40,6 +40,7 @@
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "sonner": "2.0.7",
+    "srvx": "0.11.22",
     "tailwind-merge": "3.6.0",
     "tailwindcss": "4.3.3",
     "zod": "4.4.3"

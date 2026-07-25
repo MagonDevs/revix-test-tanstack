@@ -19,6 +19,7 @@ export default tseslint.config(
       'test-results',
       'commitlint.config.js',
       'prettier.config.js',
+      'server.entry.mjs',
     ],
   },
   js.configs.recommended,
