@@ -3,12 +3,23 @@
 A pet-adoption listing platform: people publish pets that need a home, others send an adoption
 request to the person caring for that pet.
 
-**This entire repository is being built end-to-end by Claude, autonomously, from a written spec —
-no hand-written application code.** The project exists to test [Revix AI](https://revix.ai)'s
-ability to work from a real, detailed engineering spec (user stories, architecture decisions, a
-full API contract, page-by-page design direction, and a phased build plan) and produce a
-production-shaped codebase without a human writing the implementation. Every commit on `main` is
-Claude executing one phase of that build plan; nothing here was typed by a person.
+## Why this repo exists
+
+**Every line of code here was written by Claude, autonomously, from a written spec — nobody typed
+the application.** Five docs (user stories, architecture decisions, a full REST contract, a
+page-by-page design system, and a nine-phase build plan) went in; Claude reads them, plans the
+work, and executes phase by phase, committing as it goes. No human wrote `src/`.
+
+That makes this repo a live stress test for **[Revix](https://userevix.com)** — AI code review
+that reads your whole codebase, not just the diff in front of it, and reviews pull requests the
+way a senior engineer on the team would. Revix's whole premise is that AI-authored code still
+needs a second pair of eyes that actually understands the surrounding system: does this PR match
+the codebase's own conventions, does it respect the architecture the team already agreed on, does
+it quietly reintroduce a bug the codebase has seen before. An AI-built repo — spec-driven,
+phase-by-phase, produced without a human in the implementation loop — is close to a worst case for
+that kind of review: fast-moving, high-volume, and exactly the situation where a shallow "does the
+diff look reasonable" reviewer misses the most. Adopta exists to give Revix real pull requests,
+against a real layered architecture with real rules to violate, and see what it catches.
 
 ## Stack
 
