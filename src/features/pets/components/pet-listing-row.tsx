@@ -86,16 +86,14 @@ export function PetListingRow({ pet }: PetListingRowProps) {
 
       <div className="flex items-center gap-3 sm:ml-auto">
         <StatusStamp status={pet.status} />
-        {/* Plain <a>, not a typed <Link>: /dashboard/requests/received has no
-            `petId` search param until Phase 6 wires it up — this only needs
-            to point at the right place today. */}
-        <a
-          href={`/dashboard/requests/received?petId=${pet.id}`}
+        <Link
+          to="/dashboard/requests/received"
+          search={{ petId: pet.id, status: 'pending' }}
           className="text-sm text-mute underline-offset-4 hover:text-ink hover:underline"
         >
           {pet.pendingRequestCount} pending request
           {pet.pendingRequestCount === 1 ? '' : 's'}
-        </a>
+        </Link>
 
         <DropdownMenuRoot>
           <DropdownMenuTrigger asChild>

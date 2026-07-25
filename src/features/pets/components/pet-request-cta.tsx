@@ -1,4 +1,7 @@
 import { Link } from '@tanstack/react-router'
+import { useState } from 'react'
+
+import { RequestDialog } from '~/features/adoption-requests/components/request-dialog'
 
 import { Button } from '~/shared/ui/button'
 
@@ -16,6 +19,7 @@ export interface PetRequestCtaProps {
  * as a no-op for now.
  */
 export function PetRequestCta({ pet, viewer }: PetRequestCtaProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const isOwnPet = viewer?.id === pet.guardian.id
 
   if (isOwnPet) {
@@ -61,13 +65,16 @@ export function PetRequestCta({ pet, viewer }: PetRequestCtaProps) {
   }
 
   return (
-    <Button
-      size="lg"
-      onClick={() => {
-        // TODO(phase-6): open RequestDialog
-      }}
-    >
-      Request to adopt
-    </Button>
+    <>
+      <Button size="lg" onClick={() => setIsDialogOpen(true)}>
+        Request to adopt
+      </Button>
+      <RequestDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        petId={pet.id}
+        petName={pet.name}
+      />
+    </>
   )
 }

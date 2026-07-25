@@ -1,5 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
+import { pendingReceivedCountQuery } from '~/features/adoption-requests/api/adoption-requests.queries'
 import { sessionQuery, SiteHeader } from '~/features/auth'
 
 import { AppFooter } from '~/shared/components/app-footer'
@@ -18,11 +20,13 @@ export const Route = createFileRoute('/_authenticated')({
 })
 
 function DashboardShell() {
+  const { data: pendingRequestCount } = useQuery(pendingReceivedCountQuery())
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-6 px-5 py-8 lg:flex-row">
-        <DashboardSidebar />
+        <DashboardSidebar pendingRequestCount={pendingRequestCount ?? 0} />
         <div className="min-w-0 flex-1">
           <Outlet />
         </div>

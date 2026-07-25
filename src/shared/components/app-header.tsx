@@ -19,12 +19,14 @@ export interface AppHeaderProps {
    */
   user?: AppHeaderUser
   isSignedIn?: boolean
+  pendingRequestCount?: number
   onSignOut?: () => void
 }
 
 export function AppHeader({
   user,
   isSignedIn = false,
+  pendingRequestCount = 0,
   onSignOut = () => {},
 }: AppHeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -54,7 +56,7 @@ export function AppHeader({
                 {...(user?.avatarUrl !== undefined
                   ? { avatarUrl: user.avatarUrl }
                   : {})}
-                pendingRequestCount={0}
+                pendingRequestCount={pendingRequestCount}
                 onSignOut={onSignOut}
               />
             </>

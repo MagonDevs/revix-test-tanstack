@@ -8,20 +8,35 @@ interface DashboardLink {
   badge?: number
 }
 
-const LINKS: DashboardLink[] = [
-  { label: 'My listings', to: '/dashboard/pets' },
-  { label: 'Requests received', to: '/dashboard/requests/received' },
-  { label: 'Requests sent', to: '/dashboard/requests/sent' },
-  { label: 'Favourites', to: '/dashboard/favourites' },
-  { label: 'Profile', to: '/dashboard/profile' },
-]
+export interface DashboardSidebarProps {
+  /**
+   * Presentational only — `shared` may not import `features/adoption-requests`,
+   * so the route layer (`_authenticated.tsx`) reads the pending-count query
+   * and passes the result down as a plain prop, same precedent as `AppHeader`.
+   */
+  pendingRequestCount?: number
+}
 
 /**
  * A single markup source: a flex row that scrolls horizontally as a tab
  * strip below `lg`, and becomes a 240px vertical rail at `lg+` via
  * responsive classes — no duplicated markup for the two breakpoints.
  */
-export function DashboardSidebar() {
+export function DashboardSidebar({
+  pendingRequestCount = 0,
+}: DashboardSidebarProps) {
+  const LINKS: DashboardLink[] = [
+    { label: 'My listings', to: '/dashboard/pets' },
+    {
+      label: 'Requests received',
+      to: '/dashboard/requests/received',
+      ...(pendingRequestCount > 0 ? { badge: pendingRequestCount } : {}),
+    },
+    { label: 'Requests sent', to: '/dashboard/requests/sent' },
+    { label: 'Favourites', to: '/dashboard/favourites' },
+    { label: 'Profile', to: '/dashboard/profile' },
+  ]
+
   return (
     <nav
       aria-label="Dashboard"

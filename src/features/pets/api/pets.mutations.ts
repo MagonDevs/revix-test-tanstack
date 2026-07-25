@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
+import { requestKeys } from '~/features/adoption-requests/api/adoption-requests.queries'
+
 import { reportMutationError } from '~/shared/lib/report-mutation-error'
 import { toast } from '~/shared/ui/toast'
 
@@ -77,9 +79,9 @@ export function useUpdatePet(petId: string, form?: MutationFormLike) {
 }
 
 /** Optimistic on the status chip: the row/detail's status flips immediately,
- * rolls back on error. Invalidates detail + mine per doc02 §5.7; that table
- * also lists `requestKeys.received()` here, but that key doesn't exist until
- * Phase 6 wires up received requests — it joins this invalidation list then. */
+ * rolls back on error. Invalidates detail + mine + `requestKeys.received()`
+ * per doc02 §5.7 — reserving/marking-adopted a pet from the listing page can
+ * make a received request's implied pet status stale too. */
 export function useUpdatePetStatus(petId: string) {
   const queryClient = useQueryClient()
 
@@ -123,6 +125,7 @@ export function useUpdatePetStatus(petId: string) {
     onSettled: async () => {
       await queryClient.invalidateQueries({ queryKey: petKeys.detail(petId) })
       await queryClient.invalidateQueries({ queryKey: petKeys.mine() })
+      await queryClient.invalidateQueries({ queryKey: requestKeys.received() })
     },
   })
 }
