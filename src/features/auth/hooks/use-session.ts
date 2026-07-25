@@ -10,7 +10,6 @@ export interface UseSessionResult {
   isLoading: boolean
 }
 
-/** Single source of truth for "who am I" — no auth context provider, no duplicated state. */
 export function useSession(): UseSessionResult {
   const { data, isLoading } = useQuery(sessionQuery())
   return {

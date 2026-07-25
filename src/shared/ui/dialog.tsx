@@ -17,10 +17,6 @@ export interface DialogContentProps extends React.ComponentProps<
   description?: string
 }
 
-/**
- * Radix Dialog traps focus inside the content and restores it to the
- * trigger on close by default — we don't override that behaviour.
- */
 export function DialogContent({
   className,
   size = 'md',

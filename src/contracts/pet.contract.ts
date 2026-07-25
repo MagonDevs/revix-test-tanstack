@@ -38,7 +38,6 @@ export const petDtoSchema = z.object({
   isNeutered: z.boolean(),
   isGoodWithKids: z.boolean(),
   isGoodWithPets: z.boolean(),
-  /** Viewer-dependent — false/null for anonymous callers. */
   isFavourited: z.boolean(),
   viewerRequestStatus: requestStatusSchema.nullable(),
   guardian: userSummaryDtoSchema,
@@ -47,7 +46,6 @@ export const petDtoSchema = z.object({
 })
 export type PetDto = z.infer<typeof petDtoSchema>
 
-/** Only ever returned from GET /me/pets. */
 export const ownedPetDtoSchema = petDtoSchema.extend({
   pendingRequestCount: z.number().int().nonnegative(),
 })
@@ -76,7 +74,6 @@ export const createPetRequestSchema = z.object({
 })
 export type CreatePetRequest = z.infer<typeof createPetRequestSchema>
 
-/** Sending `photos` replaces the whole array (order included); omitting leaves photos untouched. */
 export const updatePetRequestSchema = createPetRequestSchema.partial()
 export type UpdatePetRequest = z.infer<typeof updatePetRequestSchema>
 

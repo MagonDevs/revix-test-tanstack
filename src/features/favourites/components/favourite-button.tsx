@@ -10,17 +10,10 @@ import { useToggleFavourite } from '../api/favourites.mutations'
 export interface FavouriteButtonProps {
   petId: string
   isFavourited: boolean
-  /** Path to send a signed-out visitor back to after they sign in. */
   redirectPath: string
   className?: string
 }
 
-/**
- * Heart toggle per doc04 Part D. Signed out, it's a link into `/login` with
- * a `redirect` param (US-501) rather than a button — no optimistic mutation
- * fires for a visitor who isn't authenticated. Signed in, it delegates to
- * `useToggleFavourite`. ≥44px touch target per doc02's a11y budget.
- */
 export function FavouriteButton({
   petId,
   isFavourited,
@@ -37,9 +30,6 @@ export function FavouriteButton({
   )
 
   if (!isAuthenticated) {
-    // A plain <button> here, not a <Link>: this component is nested inside
-    // PetCard's anchor wrapper, and an <a> inside an <a> is invalid HTML
-    // that React flags as a hydration error.
     return (
       <button
         type="button"

@@ -75,7 +75,6 @@ export async function login(ctx: { request: Request }): Promise<Response> {
   const user = [...db.users.values()].find(
     (u) => u.email.toLowerCase() === email.toLowerCase(),
   )
-  // Deliberately generic message for both cases — no user enumeration.
   if (!user || !verifyPassword(password, user.passwordHash)) {
     throw ApiError.create(
       401,

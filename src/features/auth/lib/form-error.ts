@@ -1,4 +1,3 @@
-/** TanStack Form's `errors`/`errorMap` entries can be a string or a `{ message }` object. */
 export function toMessage(value: unknown): string | undefined {
   if (value === undefined || value === null) return undefined
   if (typeof value === 'string') return value

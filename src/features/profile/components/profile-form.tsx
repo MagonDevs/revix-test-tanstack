@@ -32,11 +32,6 @@ function toMessage(error: unknown): string | undefined {
   return undefined
 }
 
-/**
- * `/dashboard/profile`'s form per doc04 §B.11 — avatar + `Change photo`,
- * name/email(read-only, mono)/city/phone/bio, a sticky save bar that only
- * appears while the form is dirty, and the mono privacy footnote.
- */
 export function ProfileForm({ user }: ProfileFormProps) {
   const formErrorRef = useRef<HTMLParagraphElement>(null)
   const [formError, setFormError] = useState<string | undefined>()

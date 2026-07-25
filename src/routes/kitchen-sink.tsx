@@ -39,7 +39,6 @@ import { PageHeader } from '~/shared/components/page-header'
 import type { StampStatus } from '~/shared/ui/status-stamp'
 
 export const Route = createFileRoute('/kitchen-sink')({
-  // Dev-only design system review page — 404s in production builds.
   beforeLoad: () => {
     // eslint-disable-next-line @typescript-eslint/only-throw-error -- TanStack's notFound() is thrown by design
     if (!import.meta.env.DEV) throw notFound()

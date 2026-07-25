@@ -12,8 +12,6 @@ export interface AcceptConfirmDialogProps {
   onConfirm: (reservePet: boolean) => void
 }
 
-/** Per doc04 §B.8: accepting a request confirms with a "also mark as
- * reserved" checkbox, checked by default. */
 export function AcceptConfirmDialog({
   isOpen,
   onOpenChange,

@@ -17,7 +17,6 @@ const SORT_OPTIONS = [
   { value: 'name', label: 'Name' },
 ]
 
-/** Static Phase 1 shell — filtering and data arrive in Phase 4. */
 export function PetsBrowseShell() {
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start">

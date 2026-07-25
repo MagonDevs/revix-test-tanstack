@@ -19,7 +19,6 @@ function isSerializedApiError(value: unknown): value is SerializedApiError {
   )
 }
 
-/** Reconstructs a typed error from whatever a server function threw, crossing the RPC boundary. */
 export function parseApiError(error: unknown): ParsedApiError {
   if (isSerializedApiError(error)) {
     return {

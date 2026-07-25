@@ -13,11 +13,6 @@ import {
 
 import type { PetStatus, RequestStatus, Sex, Size, Species } from '~/contracts'
 
-/**
- * Fixed numeric seed so every developer and CI run sees an identical dataset
- * (same names, descriptions, distributions — ids and exact timestamps still vary per run,
- * which is fine: nothing in the app depends on a stable id across restarts).
- */
 const FAKER_SEED = 424242
 
 const CITIES = [
@@ -49,7 +44,6 @@ function makePhotos(petId: string, count: number): StoredPhoto[] {
     const height = portrait ? 1200 : 800
     return {
       id: newId(),
-      // Deterministic seeded placeholder image — real network fetch required to render it.
       url: `https://picsum.photos/seed/${petId}-${i}/${width}/${height}`,
       alt: null,
       width,
@@ -124,7 +118,6 @@ export function seedDb(): Db {
 
   const marta = users[0]!
 
-  // 40 pets: 28 available / 5 reserved / 5 adopted / 2 withdrawn.
   const statusPlan: PetStatus[] = [
     ...Array<PetStatus>(28).fill('available'),
     ...Array<PetStatus>(5).fill('reserved'),
@@ -136,7 +129,6 @@ export function seedDb(): Db {
     return makePet(guardian.id, i, status)
   })
 
-  // 14 adoption requests, mixed statuses, at least one accepted pair.
   const requestStatuses: RequestStatus[] = [
     'accepted',
     'pending',
@@ -176,7 +168,6 @@ export function seedDb(): Db {
     },
   )
 
-  // 6 favourites for the demo user (marta), across pets she doesn't own.
   const favouritablePets = pets
     .filter((p) => p.guardianId !== marta.id)
     .slice(0, 6)

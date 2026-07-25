@@ -22,7 +22,6 @@ const HEALTH_SWITCHES = [
   'Good with other pets',
 ]
 
-/** Static markup only — the real PetForm with validation lands in Phase 5. */
 export function PetFormShell({ mode }: PetFormShellProps) {
   return (
     <form className="mx-auto flex max-w-[640px] flex-col gap-8 pb-24">

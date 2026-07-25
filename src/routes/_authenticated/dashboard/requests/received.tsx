@@ -35,8 +35,6 @@ const TAB_LABELS: Record<TabValue, string> = {
 function RequestsReceivedPage() {
   const { status, petId } = Route.useSearch()
   const navigate = Route.useNavigate()
-  // Single unfiltered call feeds every tab's content, mirroring the
-  // `myPetsQuery` pattern used for listings.
   const { data, isLoading } = useQuery(requestsQuery({ role: 'guardian' }))
 
   const items = data?.items ?? []

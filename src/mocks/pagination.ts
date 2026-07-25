@@ -12,7 +12,6 @@ export function parsePageParams(search: URLSearchParams): {
   return { page, perPage }
 }
 
-/** Out-of-range pages return an empty `items` array with correct `meta`, never a 404. */
 export function paginate<T>(
   all: T[],
   page: number,

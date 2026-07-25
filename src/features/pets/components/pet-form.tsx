@@ -79,8 +79,6 @@ export interface PetFormProps {
   onDeleteRequested?: () => void
 }
 
-/** One PetForm, two modes — create posts, edit PATCHes only the diff. Five
- * hairline-separated sections, not a wizard, per doc04 §B.7. */
 export function PetForm({
   mode,
   petId,

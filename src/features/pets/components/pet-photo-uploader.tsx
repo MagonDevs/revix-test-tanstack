@@ -25,13 +25,6 @@ function createLocalId(): string {
     : `local-${Date.now()}-${Math.random().toString(36).slice(2)}`
 }
 
-/**
- * Multi-select + drag-drop up to MAX_PET_PHOTOS. Because uploads go through a
- * TanStack Start server function (fetch()-based), there's no reliable
- * upload-progress event stream in this stack — so per-file progress is
- * indeterminate (pending -> uploaded/error) rather than a real byte percentage.
- * This is a deliberate simplification, not an oversight.
- */
 export function PetPhotoUploader({ photos, onChange }: PetPhotoUploaderProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const fileMapRef = useRef<Map<string, File>>(new Map())

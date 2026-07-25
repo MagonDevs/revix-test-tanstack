@@ -12,11 +12,6 @@ export interface AppHeaderUser {
 }
 
 export interface AppHeaderProps {
-  /**
-   * Presentational only — `shared` may not import `features/auth`, so the
-   * route layer (`__root.tsx`) reads `useSession()` and passes the result
-   * down as plain props.
-   */
   user?: AppHeaderUser
   isSignedIn?: boolean
   pendingRequestCount?: number

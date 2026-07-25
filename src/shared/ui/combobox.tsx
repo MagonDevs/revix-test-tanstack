@@ -14,7 +14,6 @@ export interface ComboboxProps {
   'aria-label'?: string
 }
 
-/** Free text is always allowed — suggestions narrow, they never constrain. */
 export function Combobox({
   options,
   value = '',

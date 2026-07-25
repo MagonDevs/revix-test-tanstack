@@ -14,7 +14,6 @@ export interface AuthFieldError {
   message: string
 }
 
-/** Distinguishes "map onto a field" from "show as a form-level message". */
 export interface AuthMutationError {
   formError?: string
   fieldErrors: AuthFieldError[]
@@ -33,7 +32,6 @@ function toAuthMutationError(error: unknown): AuthMutationError {
   }
 
   if (parsed.code === 'unauthenticated') {
-    // US-102: bad credentials are always a single generic message, password cleared.
     return {
       formError: 'Email or password is incorrect.',
       fieldErrors: [],
@@ -57,7 +55,6 @@ export function useRegister() {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: authKeys.session() })
       queryClient.clear()
-      // US-101: after register, always land on /pets.
       await navigate({ to: '/pets' })
     },
   })
@@ -66,9 +63,6 @@ export function useRegister() {
 export function useLogin() {
   const queryClient = useQueryClient()
 
-  // Navigation (redirect param vs /pets) is decided by the caller (LoginForm),
-  // since it depends on the route's `redirect` search param — the hook only
-  // owns cache invalidation per doc02 §5.7's table.
   return useMutation({
     mutationFn: (input: LoginRequest) => loginFn({ data: input }),
     onSuccess: async () => {

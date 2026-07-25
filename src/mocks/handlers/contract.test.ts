@@ -1,5 +1,3 @@
-// Mock handlers use the Fetch API's Request/Response/FormData directly — run this file
-// under Node so those are the real, fully-featured implementations, not jsdom's stubs.
 // @vitest-environment node
 import { beforeEach, describe, expect, it } from 'vitest'
 
@@ -30,8 +28,6 @@ import {
   userDtoSchema,
 } from '~/contracts'
 
-/** Handlers throw `ApiError` directly (real route usage relies on `withMockBehaviour` to
- * catch it) — mirror that conversion here so error-path assertions see a real Response. */
 async function call<T>(fn: () => T | Promise<T>): Promise<Response> {
   try {
     return (await fn()) as Response
@@ -40,16 +36,9 @@ async function call<T>(fn: () => T | Promise<T>): Promise<Response> {
   }
 }
 
-/**
- * The rule that keeps the mock and the contract from drifting: every handler is called with
- * representative input and its JSON body is parsed with the exact schema `api-client` uses.
- * If a handler starts returning a field the contract doesn't know about, or omits one it
- * requires, this test fails.
- */
-
 function cookieHeaderFor(userId: string): string {
   const token = createSession(userId)
-  return setCookieHeader(token).split(';')[0]! // "adopta_session=<token>"
+  return setCookieHeader(token).split(';')[0]!
 }
 
 function requestFor(

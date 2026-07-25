@@ -35,7 +35,6 @@ function formatRelativeDate(date: Date): string {
   return RELATIVE_FORMATTER.format(diffDays, 'day')
 }
 
-/** Shared panel for both received and sent lists per doc04 §B.8/B.9. */
 export function RequestPanel({ request, direction }: RequestPanelProps) {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isAcceptOpen, setIsAcceptOpen] = useState(false)

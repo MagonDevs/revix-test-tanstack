@@ -18,7 +18,6 @@ export interface PetTraits {
   isGoodWithPets: boolean
 }
 
-/** Domain model for a pet — the DTO shaped for UI consumption, per doc02 §5.4. */
 export interface Pet {
   id: string
   name: string

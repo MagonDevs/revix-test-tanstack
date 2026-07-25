@@ -23,8 +23,6 @@ interface RouterContext {
 }
 
 export const Route = createRootRouteWithContext<RouterContext>()({
-  // Prefetches the session so the header renders signed-in state on first
-  // paint (US-104) — no client-side flash from a loading -> loaded query.
   loader: ({ context }) => context.queryClient.ensureQueryData(sessionQuery()),
   head: () => ({
     meta: [

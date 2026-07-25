@@ -48,10 +48,6 @@ export const userPetsQuery = (
     queryFn: () => getUserPetsFn({ data: { userId, ...query } }),
   })
 
-/**
- * Fetches the caller's own listings. Status tab counts are derived client-side
- * from a single unfiltered call rather than firing one request per tab.
- */
 export const myPetsQuery = (query: Partial<MyPetsQuery> = {}) =>
   queryOptions({
     queryKey: petKeys.mineList(query),

@@ -22,11 +22,6 @@ function rolePrefix(role: RequestRole) {
   return role === 'guardian' ? requestKeys.received() : requestKeys.sent()
 }
 
-/**
- * Fetches the caller's requests for a role. Status tab counts are derived
- * client-side from a single unfiltered call per role, mirroring the
- * `myPetsQuery` pattern — one request per tab would be wasteful here too.
- */
 export const requestsQuery = (query: {
   role: RequestRole
   status?: AdoptionRequestListQuery['status']
@@ -51,8 +46,6 @@ export const requestDetailQuery = (requestId: string) =>
     queryFn: () => getAdoptionRequestFn({ data: { requestId } }),
   })
 
-/** Cheap count for the nav badge: perPage:1 on the pending/guardian slice —
- * the list endpoint's `meta.total` gives us the count without pulling every row. */
 export const pendingReceivedCountQuery = () =>
   queryOptions({
     queryKey: [...requestKeys.received(), 'pending-count'] as const,

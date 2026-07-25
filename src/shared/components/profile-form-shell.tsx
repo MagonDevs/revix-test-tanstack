@@ -4,7 +4,6 @@ import { Field } from '~/shared/ui/field'
 import { Input } from '~/shared/ui/input'
 import { Textarea } from '~/shared/ui/textarea'
 
-/** Static markup only — persistence lands in Phase 7. */
 export function ProfileFormShell() {
   return (
     <form className="flex max-w-[480px] flex-col gap-4">

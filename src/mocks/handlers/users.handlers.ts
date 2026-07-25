@@ -19,9 +19,6 @@ export async function updateMe(ctx: { request: Request }): Promise<Response> {
   const viewer = requireAuth(ctx.request)
   const rawBody = await readJsonBody(ctx.request)
 
-  // Email is read-only in the MVP (doc03 §3.2). z.object() silently drops
-  // unknown/unlisted keys by default, so this must be checked against the
-  // raw body before it's parsed away.
   if (typeof rawBody === 'object' && rawBody !== null && 'email' in rawBody) {
     throw ApiError.create(422, 'validation_error', 'Email cannot be changed.', [
       { field: 'email', message: 'Email cannot be changed in the MVP.' },
@@ -34,8 +31,6 @@ export async function updateMe(ctx: { request: Request }): Promise<Response> {
     'Your profile could not be saved.',
   )
 
-  // `avatarUploadId`, not `avatarUrl`: resolve the owned upload's URL server-side
-  // (mirrors the real API — R-15, avatarUploadId must belong to the caller).
   let avatarUrl: string | null | undefined
   if (body.avatarUploadId !== undefined) {
     if (body.avatarUploadId === null) {

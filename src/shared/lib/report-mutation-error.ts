@@ -10,17 +10,10 @@ interface FormLike {
 }
 
 export interface ReportMutationErrorOptions {
-  /** When provided, `validation_error` field details are mapped onto matching form fields. */
   form?: FormLike
-  /** Message shown when there's no form in scope, or the error isn't field-mappable. */
   fallbackMessage?: string
 }
 
-/**
- * Shared mutation error handler per doc02 §5.7: parses the error, maps
- * `validation_error` details onto form fields when a form is in scope,
- * otherwise shows a toast. Every mutation's onError should funnel through this.
- */
 export function reportMutationError(
   error: unknown,
   options: ReportMutationErrorOptions = {},

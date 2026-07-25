@@ -2,11 +2,6 @@ import { z } from 'zod'
 
 import type { UpdateUserRequest, SessionUserDto } from '~/contracts'
 
-/**
- * Form schema for `PATCH /users/me` per doc03 §3.2/§1.5 — email is
- * intentionally excluded (read-only in the MVP, the API rejects it with
- * `422`). Constraints mirror `updateUserRequestSchema`.
- */
 export const profileFormSchema = z.object({
   name: z
     .string()
@@ -28,9 +23,7 @@ export const profileFormSchema = z.object({
     .trim()
     .max(500, 'Bio must be 500 characters or fewer.')
     .nullable(),
-  // Display only — the avatar preview. Never sent to the API; see `avatarUploadId`.
   avatarUrl: z.string().nullable(),
-  // Set after a successful photo upload; the id (not the URL) is what the API accepts.
   avatarUploadId: z.string().nullable().optional(),
 })
 export type ProfileFormValues = z.infer<typeof profileFormSchema>
@@ -46,7 +39,6 @@ export function toProfileFormValues(user: SessionUserDto): ProfileFormValues {
   }
 }
 
-/** Diffs against the initial values so the PATCH only carries changed fields. */
 export function toUpdateUserRequest(
   values: ProfileFormValues,
   initialValues: ProfileFormValues,
@@ -59,8 +51,6 @@ export function toUpdateUserRequest(
       diff[key] = values[key]
     }
   }
-  // avatarUploadId isn't diffed against an initial value — it's only ever set
-  // once a new photo has been uploaded, so its presence alone means "send it".
   if (values.avatarUploadId !== undefined) {
     diff.avatarUploadId = values.avatarUploadId
   }

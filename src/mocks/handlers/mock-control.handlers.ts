@@ -10,7 +10,6 @@ import { createSession, setCookieHeader } from '../session'
 import { seedDb } from '../seed'
 import { parseOrThrow } from '../validation'
 
-/** Reseeds from the fixed seed — used by Playwright for a deterministic starting state. */
 export function reset(): Response {
   resetDb(seedDb())
   return jsonResponse({ ok: true })
@@ -36,7 +35,6 @@ export async function config(ctx: { request: Request }): Promise<Response> {
 
 const loginAsRequestSchema = z.object({ email: z.string() })
 
-/** Signs in as a seeded user without a password — mock-only, gated by MOCK_API. */
 export async function loginAs(ctx: { request: Request }): Promise<Response> {
   const body = parseOrThrow(
     loginAsRequestSchema,

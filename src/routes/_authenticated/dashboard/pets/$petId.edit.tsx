@@ -70,9 +70,6 @@ function EditPetPage() {
   const deletePet = useDeletePet()
   const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
-  // Ownership is enforced server-side (writes 403 regardless); this is only
-  // the frontend's job of rendering the right state for a listing that isn't
-  // the viewer's, per doc02 §9 — not duplicated auth logic.
   const isOwner = pet.guardian.id === session.id
 
   if (!isOwner) {

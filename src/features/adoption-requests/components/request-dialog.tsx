@@ -17,8 +17,6 @@ export interface RequestDialogProps {
   petName: string
 }
 
-/** Per doc04 §B.3: pet name in the title, a 20-1000 char message with a live
- * counter, and a mono line stating exactly what the guardian will see. */
 export function RequestDialog({
   isOpen,
   onOpenChange,

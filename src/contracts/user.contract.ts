@@ -23,11 +23,6 @@ export const sessionUserDtoSchema = userDtoSchema.extend({
 })
 export type SessionUserDto = z.infer<typeof sessionUserDtoSchema>
 
-/**
- * PATCH /users/me — email is intentionally excluded; the API rejects it with 422 in the MVP.
- * `avatarUploadId`, not `avatarUrl`: the caller names an upload it owns and the server
- * resolves the public URL itself (ownership-checked, R-15).
- */
 export const updateUserRequestSchema = z.object({
   name: z.string().min(2).max(60).optional(),
   city: z.string().min(2).max(80).optional(),

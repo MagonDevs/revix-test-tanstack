@@ -34,7 +34,6 @@ export function destroySession(request: Request): void {
   if (token) db.sessions.delete(token)
 }
 
-/** httpOnly, SameSite=Lax, Secure in production, 30-day expiry — matches doc03 §1. */
 export function setCookieHeader(token: string): string {
   const secure = process.env.NODE_ENV === 'production' ? '; Secure' : ''
   return `${SESSION_COOKIE_NAME}=${token}; Path=/; Max-Age=${THIRTY_DAYS_SECONDS}; HttpOnly; SameSite=Lax${secure}`

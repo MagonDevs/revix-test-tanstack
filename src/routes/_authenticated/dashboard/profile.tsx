@@ -12,8 +12,6 @@ export const Route = createFileRoute('/_authenticated/dashboard/profile')({
 })
 
 function ProfilePage() {
-  // Prefetched at root per doc02 — the `_authenticated` layout already
-  // guarantees a session exists here, so `data` is never null on this route.
   const { data: user } = useSuspenseQuery(sessionQuery())
 
   return (

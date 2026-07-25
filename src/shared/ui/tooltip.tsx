@@ -9,7 +9,6 @@ export interface TooltipProps {
   children: React.ReactNode
 }
 
-/** Keyboard-triggerable: Radix shows the tooltip on focus as well as hover. */
 export function Tooltip({ content, children }: TooltipProps) {
   return (
     <TooltipPrimitive.Root>

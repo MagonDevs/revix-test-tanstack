@@ -13,8 +13,6 @@ import type {
   Species,
 } from '~/contracts'
 
-// --- Stored entity shapes (internal vocabulary — mapped to DTOs in handlers) ---
-
 export interface StoredPhoto {
   id: string
   url: string
@@ -93,7 +91,6 @@ export interface Db {
   sessions: Map<string, StoredSession>
   pets: Map<string, StoredPet>
   adoptionRequests: Map<string, StoredAdoptionRequest>
-  /** Keyed by `${userId}:${petId}` — a Set would lose the timestamp, and order doesn't matter. */
   favourites: Map<string, { userId: string; petId: string; createdAt: string }>
   uploads: Map<string, StoredUpload>
 }
@@ -109,7 +106,6 @@ function emptyDb(): Db {
   }
 }
 
-// Module-level store — the whole point of a fake backend inside the same process.
 export let db: Db = emptyDb()
 
 const PERSIST_PATH = resolve(process.cwd(), '.mock-db.json')
@@ -130,7 +126,7 @@ export function persist(): void {
   try {
     writeFileSync(PERSIST_PATH, serialize(), 'utf-8')
   } catch {
-    // Best-effort dev convenience only — never let persistence failures break a request.
+    return
   }
 }
 
@@ -165,10 +161,6 @@ export function resetDb(next: Db): void {
   persist()
 }
 
-/**
- * Raw upload bytes, kept out of the persisted `Db` (they'd bloat `.mock-db.json` and aren't
- * needed to prove the contract) — served back by `/uploads/:id/raw`.
- */
 export const uploadBytes = new Map<
   string,
   { bytes: ArrayBuffer; contentType: string }
@@ -182,7 +174,6 @@ export function nowIso(): string {
   return new Date().toISOString()
 }
 
-/** Explicitly NOT real security — a salted sha256 is only enough to make the login path exercise real comparisons. */
 export function hashPassword(password: string): string {
   return createHash('sha256').update(`adopta-mock:${password}`).digest('hex')
 }
@@ -191,7 +182,6 @@ export function verifyPassword(password: string, hash: string): boolean {
   return hashPassword(password) === hash
 }
 
-/** Bumps updatedAt and persists. Every write to a collection should go through this. */
 export function mutate<T extends { updatedAt: string }>(
   map: Map<string, T>,
   id: string,

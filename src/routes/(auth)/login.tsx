@@ -22,7 +22,6 @@ function LoginPage() {
       <h1 className="font-display text-xl font-semibold text-ink">Sign in</h1>
       <LoginForm
         onSuccess={() => {
-          // US-102: land on the `redirect` param if present, else /pets.
           void navigate({ to: redirect ?? '/pets' })
         }}
       />

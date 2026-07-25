@@ -22,7 +22,6 @@ export function listFavourites(ctx: { request: Request }): Response {
   return jsonResponse({ items: items.map((p) => toPetDto(p, viewer.id)), meta })
 }
 
-/** PUT is idempotent — favouriting twice is 204, not 409. */
 export function addFavourite(ctx: {
   request: Request
   params: { petId: string }

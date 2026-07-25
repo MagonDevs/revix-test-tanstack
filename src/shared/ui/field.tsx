@@ -14,7 +14,6 @@ export interface FieldProps {
   }) => React.ReactNode
 }
 
-/** Wraps a label + control + hint + error, wiring aria-describedby for a11y. */
 export function Field({
   label,
   hint,

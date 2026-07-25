@@ -10,7 +10,6 @@ export interface AdoptionRequestContact {
   phone: string | undefined
 }
 
-/** Domain model for an adoption request — DTO shaped for UI consumption, per doc02 §5.4. */
 export interface AdoptionRequest {
   id: string
   status: RequestStatus
@@ -23,8 +22,6 @@ export interface AdoptionRequest {
   }
   adopter: UserSummaryDto
   guardian: UserSummaryDto
-  /** Only populated for the two parties, and only once accepted — null becomes
-   * undefined per doc02 §5.4's DTO-to-model mapping convention. */
   contact: AdoptionRequestContact | undefined
   createdAt: Date
   respondedAt: Date | undefined

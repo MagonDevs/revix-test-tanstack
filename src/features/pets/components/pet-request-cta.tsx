@@ -13,11 +13,6 @@ export interface PetRequestCtaProps {
   viewer: SessionUserDto | null | undefined
 }
 
-/**
- * Renders the correct CTA state per doc04 §B.3's table. The actual request
- * flow (opening the dialog) is Phase 6's job — the one live state is wired
- * as a no-op for now.
- */
 export function PetRequestCta({ pet, viewer }: PetRequestCtaProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const isOwnPet = viewer?.id === pet.guardian.id

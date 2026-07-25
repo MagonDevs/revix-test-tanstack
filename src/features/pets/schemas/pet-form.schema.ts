@@ -4,14 +4,7 @@ import type { CreatePetRequest, UpdatePetRequest } from '~/contracts'
 
 import { sexSchema, sizeSchema, speciesSchema } from '~/contracts'
 
-/**
- * Form schema — deliberately diverges from the wire schema per doc02 §7.
- * `photos` here holds local upload state (one entry per selected/uploaded
- * file), not just wire-ready `uploadId`s; `toCreatePetRequest` maps down to
- * the wire shape once every photo has an `uploadId`.
- */
 export const petPhotoFormSchema = z.object({
-  /** Client-local id (crypto.randomUUID) used for list keys/reordering, not sent to the server. */
   localId: z.string(),
   uploadId: z.string().nullable(),
   previewUrl: z.string(),
@@ -85,7 +78,6 @@ export function createEmptyPetFormValues(): PetFormValues {
   }
 }
 
-/** Maps form state to the wire CreatePetRequest — only uploaded photos (with an uploadId) count. */
 export function toCreatePetRequest(values: PetFormValues): CreatePetRequest {
   return {
     name: values.name,
@@ -107,13 +99,6 @@ export function toCreatePetRequest(values: PetFormValues): CreatePetRequest {
   }
 }
 
-/**
- * Diffs edited form values against the values the form was initialised with,
- * returning only the fields that changed — so PATCH sends a partial payload.
- * `photos` is treated as all-or-nothing: if the photo list changed at all
- * (order, additions, removals), the whole array is sent, per the wire
- * contract's "sending `photos` replaces the whole array" rule.
- */
 export function toUpdatePetRequest(
   values: PetFormValues,
   initialValues: PetFormValues,

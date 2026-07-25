@@ -18,8 +18,6 @@ import type {
   RespondToRequestRequest,
 } from '~/contracts'
 
-/** Sending a request invalidates `requestKeys.sent()` + `petKeys.detail(petId)`
- * per doc02 §5.7 — the pet's CTA flips to "Request sent" on the next render. */
 export function useCreateRequest(petId: string) {
   const queryClient = useQueryClient()
 
@@ -35,9 +33,6 @@ export function useCreateRequest(petId: string) {
   })
 }
 
-/** Optimistic on the status chip per doc02 §5.7: the panel's stamp flips
- * immediately, rolls back on error. Invalidates `requestKeys.received()` +
- * `petKeys.mine()` on settle (accepting can reserve the pet). */
 export function useRespondToRequest(requestId: string) {
   const queryClient = useQueryClient()
 
@@ -85,7 +80,6 @@ export function useRespondToRequest(requestId: string) {
   })
 }
 
-/** Optimistic per doc02 §5.7: the withdrawn row's stamp flips immediately. */
 export function useWithdrawRequest() {
   const queryClient = useQueryClient()
 

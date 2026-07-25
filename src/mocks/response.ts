@@ -27,11 +27,10 @@ export function errorEnvelope(
   details?: FieldError[],
 ) {
   const body = { error: { code, message, ...(details ? { details } : {}) } }
-  apiErrorBodySchema.parse(body) // guards the mock against drifting from its own contract
+  apiErrorBodySchema.parse(body)
   return body
 }
 
-/** Converts a thrown ApiError (or anything else) into a contract-shaped error Response. */
 export function handleMockError(error: unknown): Response {
   if (error instanceof ApiError) {
     return jsonResponse(

@@ -30,9 +30,6 @@ interface MutationFormLike {
   }) => void
 }
 
-/** Uploads a single photo file. Progress is reported as pending/uploaded — see
- * pet-photo-uploader.tsx for why a determinate per-byte progress isn't wired up
- * (fetch()-based server functions don't expose upload progress events in this stack). */
 export function useUploadPhoto() {
   return useMutation({
     mutationFn: async (file: File): Promise<UploadDto> => {
@@ -78,10 +75,6 @@ export function useUpdatePet(petId: string, form?: MutationFormLike) {
   })
 }
 
-/** Optimistic on the status chip: the row/detail's status flips immediately,
- * rolls back on error. Invalidates detail + mine + `requestKeys.received()`
- * per doc02 §5.7 — reserving/marking-adopted a pet from the listing page can
- * make a received request's implied pet status stale too. */
 export function useUpdatePetStatus(petId: string) {
   const queryClient = useQueryClient()
 
@@ -130,8 +123,6 @@ export function useUpdatePetStatus(petId: string) {
   })
 }
 
-/** Optimistic row removal — one of the four cases doc02 §5.7 explicitly calls
- * out for optimism. Snapshot on mutate, rollback on error, always re-sync on settle. */
 export function useDeletePet() {
   const queryClient = useQueryClient()
 

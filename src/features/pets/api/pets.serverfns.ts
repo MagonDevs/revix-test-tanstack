@@ -127,7 +127,6 @@ export const deletePetFn = createServerFn({ method: 'POST' })
     }),
   )
 
-/** Accepts a single `file` field FormData — see uploads.endpoints.ts's passthrough. */
 export const uploadPhotoFn = createServerFn({ method: 'POST' })
   .inputValidator((data: unknown) => data as FormData)
   .handler(

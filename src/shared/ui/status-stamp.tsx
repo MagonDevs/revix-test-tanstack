@@ -19,7 +19,6 @@ export interface StatusStampProps {
   className?: string
 }
 
-/** Hairline-bordered chip with mono uppercase text and a status dot — never a filled pill. */
 export function StatusStamp({ status, className }: StatusStampProps) {
   return (
     <span

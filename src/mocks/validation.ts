@@ -3,7 +3,6 @@ import { ApiError } from '~/server/api-client/api-error'
 import type { FieldError } from '~/contracts'
 import type { z } from 'zod'
 
-/** Parses `body` with `schema`; throws a real 422 ApiError with field details on failure. */
 export function parseOrThrow<T extends z.ZodTypeAny>(
   schema: T,
   body: unknown,

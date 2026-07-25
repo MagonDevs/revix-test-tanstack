@@ -10,7 +10,6 @@ interface SerializedApiError {
   details?: FieldError[]
 }
 
-/** Wraps a server function handler so an ApiError crosses the RPC boundary as a plain, reconstructable payload. */
 export function withApiErrors<TArgs extends unknown[], TResult>(
   handler: (...args: TArgs) => Promise<TResult>,
 ): (...args: TArgs) => Promise<TResult> {

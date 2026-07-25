@@ -19,8 +19,6 @@ export async function createAdoptionRequest(ctx: {
 }): Promise<Response> {
   const adopter = requireAuth(ctx.request)
   const pet = db.pets.get(ctx.params.petId)
-  // A `withdrawn` pet not owned by the caller doesn't confirm its existence — 404, per doc03 §1.1.
-  // `adopted` still resolves so a stale page can surface the real 409 instead of a misleading 404.
   const visible =
     pet && (pet.status !== 'withdrawn' || pet.guardianId === adopter.id)
   if (!pet || !visible)
@@ -90,7 +88,6 @@ export function listMyAdoptionRequests(ctx: { request: Request }): Response {
   if (query.status) requests = requests.filter((r) => r.status === query.status)
   if (query.petId) requests = requests.filter((r) => r.petId === query.petId)
 
-  // Default sort: pending first, then newest.
   requests = [...requests].sort((a, b) => {
     if (a.status === 'pending' && b.status !== 'pending') return -1
     if (a.status !== 'pending' && b.status === 'pending') return 1

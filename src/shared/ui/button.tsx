@@ -36,7 +36,6 @@ export interface ButtonProps
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   isLoading?: boolean
-  /** Merge props onto the single child element instead of rendering a <button>. */
   asChild?: boolean
 }
 

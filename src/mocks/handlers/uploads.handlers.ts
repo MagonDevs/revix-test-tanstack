@@ -7,8 +7,6 @@ import { jsonResponse } from '../response'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_BYTES = 5 * 1024 * 1024
-// The mock doesn't decode real image dimensions — it fakes a plausible size so PetPhoto's
-// width/height contract fields are always populated, honestly labelled here as a simplification.
 const FAKE_WIDTH = 1200
 const FAKE_HEIGHT = 800
 

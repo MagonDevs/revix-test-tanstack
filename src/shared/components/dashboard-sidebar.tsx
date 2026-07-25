@@ -9,19 +9,9 @@ interface DashboardLink {
 }
 
 export interface DashboardSidebarProps {
-  /**
-   * Presentational only — `shared` may not import `features/adoption-requests`,
-   * so the route layer (`_authenticated.tsx`) reads the pending-count query
-   * and passes the result down as a plain prop, same precedent as `AppHeader`.
-   */
   pendingRequestCount?: number
 }
 
-/**
- * A single markup source: a flex row that scrolls horizontally as a tab
- * strip below `lg`, and becomes a 240px vertical rail at `lg+` via
- * responsive classes — no duplicated markup for the two breakpoints.
- */
 export function DashboardSidebar({
   pendingRequestCount = 0,
 }: DashboardSidebarProps) {

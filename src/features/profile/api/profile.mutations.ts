@@ -16,13 +16,6 @@ interface MutationFormLike {
   }) => void
 }
 
-/**
- * Not optimistic — per doc02 §5.7's mutation table `updateProfile` invalidates
- * `authKeys.session()` + `userKeys.detail(me)` on success rather than
- * patching in place, since the header, dashboard, and public profile all
- * read the session/user queries directly and a fresh fetch keeps them in
- * sync without hand-patching three call sites.
- */
 export function useUpdateProfile(form?: MutationFormLike) {
   const queryClient = useQueryClient()
 

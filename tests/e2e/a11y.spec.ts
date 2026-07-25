@@ -1,13 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { test, expect } from '@playwright/test'
 
-/**
- * Phase 8 a11y sweep (US-701 through US-708). Runs axe-core against the
- * highest-traffic public routes and asserts zero serious/critical
- * violations — the achievable bar for a hardening pass, not a full
- * remediation project. Moderate/minor violations are logged, not failed,
- * so a clean run doesn't silently hide them.
- */
 async function expectNoSeriousViolations(
   page: import('@playwright/test').Page,
 ) {

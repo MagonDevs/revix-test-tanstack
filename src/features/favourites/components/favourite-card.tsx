@@ -11,12 +11,6 @@ export interface FavouriteCardProps {
   pet: Pet
 }
 
-/**
- * Wraps `PetCard` (same grid as browse, per doc04 §B.10) with a `Remove`
- * action that surfaces on hover/focus on desktop and stays visible on touch
- * — the card's own `FavouriteButton` heart already handles the toggle, this
- * is a second, explicit affordance for the favourites list specifically.
- */
 export function FavouriteCard({ pet }: FavouriteCardProps) {
   const toggleFavourite = useToggleFavourite()
 

@@ -21,7 +21,6 @@ export const adoptionRequestDtoSchema = z.object({
   }),
   adopter: userSummaryDtoSchema,
   guardian: userSummaryDtoSchema,
-  /** Present only when status === 'accepted', and only to the two parties. */
   contact: z
     .object({ email: z.string(), phone: z.string().nullable() })
     .nullable(),

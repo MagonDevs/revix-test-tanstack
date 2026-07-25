@@ -15,21 +15,11 @@ import {
   type RegisterRequest,
 } from '~/contracts'
 
-/** Only the headers the API is allowed to see. */
 function forwardedHeaders(): HeadersInit {
   const cookie = getRequestHeader('cookie')
   return cookie ? { cookie } : {}
 }
 
-/**
- * Register/login/logout all set or clear the session cookie, which
- * `apiRequest` (the app's one typed HTTP client) intentionally doesn't
- * expose — see `relayCookie`'s doc comment. These three calls fetch the
- * mock/real API directly so the raw `Response` (and its `set-cookie`
- * header) is available to relay onto the outgoing server-function
- * response; everything else (error shape, body parsing) mirrors what
- * `apiRequest` does.
- */
 async function fetchAuth(path: string, body?: unknown): Promise<Response> {
   const headers = forwardedHeaders()
   const init: RequestInit = {
@@ -82,7 +72,6 @@ export const logoutFn = createServerFn({ method: 'POST' }).handler(
   }),
 )
 
-/** Treats a 401 (unauthenticated) as `null` data, not an error — doc03 §3.1. */
 export const getSessionFn = createServerFn({ method: 'GET' }).handler(
   withApiErrors(async () => {
     try {

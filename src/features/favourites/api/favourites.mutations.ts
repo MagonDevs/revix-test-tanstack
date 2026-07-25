@@ -15,21 +15,9 @@ interface FavouritesPage {
 
 export interface ToggleFavouriteInput {
   petId: string
-  /** Whether the pet is favourited *before* this toggle. */
   isFavourited: boolean
 }
 
-/**
- * One hook toggles both directions — add when not favourited, remove when
- * favourited — since PUT is idempotent per doc03 §3.7 either is safe to
- * retry. Optimistic per doc02 §5.7: patches `petKeys.detail(petId)`'s cached
- * `isFavourited` in place and best-effort patches any cached
- * `favouriteKeys.list()` pages (removing on unfavourite always; adding on
- * favourite only when the full `Pet` is already in the detail cache — the
- * list page itself may not be loaded, and this mutation only has a petId to
- * work with). Snapshot -> rollback -> settle mirrors
- * `useRespondToRequest`/`useUpdatePetStatus`.
- */
 export function useToggleFavourite() {
   const queryClient = useQueryClient()
 
@@ -59,15 +47,12 @@ export function useToggleFavourite() {
       for (const [key, data] of previousFavouriteQueries) {
         if (!data) continue
         if (!next) {
-          // Unfavouriting: drop the pet from every cached favourites page.
           queryClient.setQueryData(key, {
             ...data,
             items: data.items.filter((pet) => pet.id !== petId),
           })
           continue
         }
-        // Favouriting: only inject the pet if we already have its full
-        // shape (from the detail cache) and it isn't already listed.
         if (previousDetail && !data.items.some((pet) => pet.id === petId)) {
           queryClient.setQueryData(key, {
             ...data,

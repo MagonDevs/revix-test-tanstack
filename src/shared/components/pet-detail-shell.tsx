@@ -16,7 +16,6 @@ export interface PetDetailShellProps {
   petId: string
 }
 
-/** Static Phase 1 shell — real data arrives in Phase 4. */
 export function PetDetailShell({ petId }: PetDetailShellProps) {
   return (
     <div className="grid gap-8 lg:grid-cols-[1.4fr_1fr]">

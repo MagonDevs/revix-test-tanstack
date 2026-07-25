@@ -27,7 +27,6 @@ import {
   updatePetStatusRequestSchema,
 } from '~/contracts'
 
-// Only pets visible to a public/anonymous caller — the guardian sees every status via /me/pets or the detail route.
 const PUBLICLY_LISTED: PetStatus[] = ['available', 'reserved']
 
 function sortPets(

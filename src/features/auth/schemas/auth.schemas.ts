@@ -2,11 +2,6 @@ import { z } from 'zod'
 
 import type { LoginRequest, RegisterRequest } from '~/contracts'
 
-/**
- * Form schemas validate the shape TanStack Form works with (strings from
- * inputs, confirmation fields). They deliberately diverge from the wire
- * schemas in ~/contracts/auth.contract — see doc02 §7.
- */
 export const loginFormSchema = z.object({
   email: z.email('Enter a valid email address.'),
   password: z.string().min(8, 'Password must be at least 8 characters.'),

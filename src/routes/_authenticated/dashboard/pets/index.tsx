@@ -49,8 +49,6 @@ const EMPTY_MESSAGES: Record<TabValue, string> = {
 function MyListingsPage() {
   const { status } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
-  // A single unfiltered call feeds every tab's count and content — cheaper
-  // than one status-scoped request per tab per doc04 §B.6.
   const { data, isLoading } = useQuery(myPetsQuery())
 
   const items = data?.items ?? []

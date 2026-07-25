@@ -14,9 +14,7 @@ interface RequestConfig<TSchema extends z.ZodTypeAny | undefined> {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE'
   query?: Record<string, QueryValue>
   body?: unknown
-  /** Omit for 204 responses. */
   schema?: TSchema
-  /** Forwarded from the incoming request so the API sees the session. */
   headers?: HeadersInit | undefined
   signal?: AbortSignal
 }
@@ -43,7 +41,6 @@ export async function apiRequest<
     method,
     headers: {
       accept: 'application/json',
-      // FormData bodies must not get a content-type: the browser sets the multipart boundary itself.
       ...(body !== undefined && !isFormData
         ? { 'content-type': 'application/json' }
         : {}),

@@ -8,7 +8,6 @@ export interface PetRecordStripProps {
   className?: string
 }
 
-/** Single-line mono record strip used on `PetCard`. */
 export function PetRecordStrip({
   species,
   ageLabel,

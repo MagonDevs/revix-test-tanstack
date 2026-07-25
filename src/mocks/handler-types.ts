@@ -1,4 +1,3 @@
-/** Shared shape every mock handler returns — a thin adapter turns this into a `Response`. */
 export interface MockResult {
   status: number
   body?: unknown
