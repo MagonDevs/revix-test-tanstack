@@ -1,13 +1,19 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { SiteHeader } from '~/features/auth'
+import { petListQuery } from '~/features/pets/api/pets.queries'
+import { PetCard } from '~/features/pets/components/pet-card'
 
 import { AppFooter } from '~/shared/components/app-footer'
 import { Button } from '~/shared/ui/button'
 import { MonoLabel } from '~/shared/ui/mono-label'
-import { Skeleton } from '~/shared/ui/skeleton'
+
+const RECENT_QUERY = { sort: 'newest' as const, page: 1, perPage: 3 }
 
 export const Route = createFileRoute('/')({
+  loader: ({ context }) =>
+    context.queryClient.ensureQueryData(petListQuery(RECENT_QUERY)),
   head: () => ({ meta: [{ title: 'Adopta — Find a pet a home' }] }),
   component: Home,
 })
@@ -31,13 +37,22 @@ const HOW_IT_WORKS = [
 ]
 
 function Home() {
+  const { data } = useSuspenseQuery(petListQuery(RECENT_QUERY))
+  const total = data.meta.total
+  const cityCount = new Set(data.items.map((pet) => pet.city)).size
+  const isEmpty = total === 0
+
   return (
     <div className="flex min-h-screen flex-col">
       <SiteHeader />
       <main className="mx-auto flex w-full max-w-[1200px] flex-1 flex-col gap-16 px-5 py-12">
         <section className="grid gap-8 lg:grid-cols-2 lg:items-center">
           <div className="flex flex-col gap-4">
-            <MonoLabel>— pets · — cities</MonoLabel>
+            {!isEmpty ? (
+              <MonoLabel>
+                {total} pets{cityCount > 0 ? ` · ${cityCount}+ cities` : ''}
+              </MonoLabel>
+            ) : null}
             <h1 className="font-display text-4xl font-bold tracking-tight text-ink lg:text-5xl">
               Find a pet a home
             </h1>
@@ -80,11 +95,27 @@ function Home() {
               View all pets
             </Link>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} variant="card" />
-            ))}
-          </div>
+          {isEmpty ? (
+            <div className="flex flex-col items-center gap-4 rounded-lg border border-dashed border-hairline px-6 py-16 text-center">
+              <p className="max-w-sm text-sm text-mute">
+                No pets have been published yet.
+              </p>
+              <Button asChild variant="secondary">
+                <Link
+                  to="/register"
+                  search={{ redirect: '/dashboard/pets/new' }}
+                >
+                  Be the first to publish
+                </Link>
+              </Button>
+            </div>
+          ) : (
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {data.items.map((pet) => (
+                <PetCard key={pet.id} pet={pet} />
+              ))}
+            </div>
+          )}
         </section>
 
         <section className="grid gap-8 border-t border-hairline pt-12 sm:grid-cols-3">

@@ -1,0 +1,73 @@
+import { Link } from '@tanstack/react-router'
+
+import { Button } from '~/shared/ui/button'
+
+import type { SessionUserDto } from '~/contracts'
+import type { Pet } from '../model/pet.model'
+
+export interface PetRequestCtaProps {
+  pet: Pet
+  viewer: SessionUserDto | null | undefined
+}
+
+/**
+ * Renders the correct CTA state per doc04 §B.3's table. The actual request
+ * flow (opening the dialog) is Phase 6's job — the one live state is wired
+ * as a no-op for now.
+ */
+export function PetRequestCta({ pet, viewer }: PetRequestCtaProps) {
+  const isOwnPet = viewer?.id === pet.guardian.id
+
+  if (isOwnPet) {
+    return (
+      <Button size="lg" disabled>
+        This is your pet
+      </Button>
+    )
+  }
+
+  if (pet.status !== 'available') {
+    return (
+      <Button size="lg" disabled>
+        Not available
+      </Button>
+    )
+  }
+
+  if (pet.viewerRequestStatus === 'pending') {
+    return (
+      <Button size="lg" disabled>
+        Request sent
+      </Button>
+    )
+  }
+
+  if (pet.viewerRequestStatus === 'accepted') {
+    return (
+      <Button size="lg" disabled>
+        Request accepted
+      </Button>
+    )
+  }
+
+  if (!viewer) {
+    return (
+      <Button size="lg" asChild>
+        <Link to="/login" search={{ redirect: `/pets/${pet.id}` }}>
+          Sign in to request
+        </Link>
+      </Button>
+    )
+  }
+
+  return (
+    <Button
+      size="lg"
+      onClick={() => {
+        // TODO(phase-6): open RequestDialog
+      }}
+    >
+      Request to adopt
+    </Button>
+  )
+}
