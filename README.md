@@ -1,189 +1,72 @@
-Welcome to your new TanStack Start app!
+# Adopta
 
-# Getting Started
+A pet-adoption listing platform: people publish pets that need a home, others send an adoption
+request to the person caring for that pet.
 
-To run this application:
+**This entire repository is being built end-to-end by Claude, autonomously, from a written spec —
+no hand-written application code.** The project exists to test [Revix AI](https://revix.ai)'s
+ability to work from a real, detailed engineering spec (user stories, architecture decisions, a
+full API contract, page-by-page design direction, and a phased build plan) and produce a
+production-shaped codebase without a human writing the implementation. Every commit on `main` is
+Claude executing one phase of that build plan; nothing here was typed by a person.
+
+## Stack
+
+TanStack Start (React 19, Vite) · TanStack Router/Query/Form · Zod 4 · Tailwind CSS 4 + Radix
+primitives · a real HTTP mock backend (in-memory, same contract a production API would implement)
+so the frontend has nothing to fake.
+
+## Status
+
+Built in phases, each with its own definition of done — see `docs/spec/05-build-plan.md`:
+
+- [x] Phase 0 — Foundation (strict TypeScript, ESLint layer boundaries, CI, tooling)
+- [x] Phase 1 — Design system and app shell
+- [x] Phase 2 — Contracts, fetch layer, mock backend
+- [ ] Phase 3 — Auth
+- [ ] Phase 4 — Browse and detail (read paths)
+- [ ] Phase 5 — Listing management (write paths)
+- [ ] Phase 6 — Adoption requests
+- [ ] Phase 7 — Favourites and profile
+- [ ] Phase 8 — Hardening and handover
+
+## The spec
+
+The full spec this build follows lives in `docs/spec/`:
+
+| Doc                         | Contents                                                                  |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `01-user-stories.md`        | Personas, epics, numbered user stories, explicit out-of-scope list        |
+| `02-architecture.md`        | Stack, layer rules, fetch layer, state, forms, auth, conventions, testing |
+| `03-api-contract.md`        | Full REST contract, error model, pagination, mock server behaviour        |
+| `04-features-and-design.md` | Route map, per-page spec, design tokens, component inventory              |
+| `05-build-plan.md`          | Nine phases, task checklists, definition of done per phase                |
+
+## Development
 
 ```bash
 pnpm install
+cp .env.example .env
 pnpm dev
 ```
 
-# Building For Production
-
-To build this application for production:
+Demo account (seeded, fixed faker seed): `marta@example.com` / `password123`.
 
 ```bash
+pnpm typecheck   # tsc --noEmit
+pnpm lint        # eslint, zero warnings
+pnpm test        # vitest
+pnpm test:e2e    # playwright
+pnpm validate    # typecheck + lint + test
 pnpm build
 ```
 
-## Styling
+## Architecture in one paragraph
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-### Removing Tailwind CSS
-
-If you prefer not to use Tailwind CSS:
-
-1. Remove the demo pages in `src/routes/demo/`
-2. Replace the Tailwind import in `src/styles.css` with your own styles
-3. Remove `tailwindcss()` from the plugins array in `vite.config.ts`
-4. Remove `@tailwindcss/vite` and `tailwindcss` from `package.json`
-
-## Linting & Formatting
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
-
-```bash
-pnpm lint
-pnpm format
-pnpm check
-```
-
-## Routing
-
-This project uses [TanStack Router](https://tanstack.com/router) with file-based routing. Routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from '@tanstack/react-router'
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you render `{children}` in the `shellComponent`.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { HeadContent, Scripts, createRootRoute } from '@tanstack/react-router'
-
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { title: 'My App' },
-    ],
-  }),
-  shellComponent: ({ children }) => (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
-          </nav>
-        </header>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  ),
-})
-```
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-## Server Functions
-
-TanStack Start provides server functions that allow you to write server-side code that seamlessly integrates with your client components.
-
-```tsx
-import { createServerFn } from '@tanstack/react-start'
-
-const getServerTime = createServerFn({
-  method: 'GET',
-}).handler(async () => {
-  return new Date().toISOString()
-})
-
-// Use in a component
-function MyComponent() {
-  const [time, setTime] = useState('')
-
-  useEffect(() => {
-    getServerTime().then(setTime)
-  }, [])
-
-  return <div>Server time: {time}</div>
-}
-```
-
-## API Routes
-
-You can create API routes by using the `server` property in your route definitions:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-import { json } from '@tanstack/react-start'
-
-export const Route = createFileRoute('/api/hello')({
-  server: {
-    handlers: {
-      GET: () => json({ message: 'Hello, World!' }),
-    },
-  },
-})
-```
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-import { createFileRoute } from '@tanstack/react-router'
-
-export const Route = createFileRoute('/people')({
-  loader: async () => {
-    const response = await fetch('https://swapi.dev/api/people')
-    return response.json()
-  },
-  component: PeopleComponent,
-})
-
-function PeopleComponent() {
-  const data = Route.useLoaderData()
-  return (
-    <ul>
-      {data.results.map((person) => (
-        <li key={person.name}>{person.name}</li>
-      ))}
-    </ul>
-  )
-}
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
-
-For TanStack Start specific documentation, visit [TanStack Start](https://tanstack.com/start).
+The browser never talks to a domain API directly — everything goes through TanStack Start server
+functions, which call a single typed HTTP client, which validates every response with Zod before
+it enters the app. Right now that HTTP client is talking to a mock backend implemented as real
+TanStack Start server routes (`src/routes/api/v1/**`) backed by an in-memory, seeded repository —
+real status codes, real latency, real error envelopes, so nothing in the frontend is built against
+an imagined response. Swapping in a real backend later is a one-line env var change plus deleting
+`src/routes/api/` and `src/mocks/`. Full detail in `docs/spec/02-architecture.md`.
