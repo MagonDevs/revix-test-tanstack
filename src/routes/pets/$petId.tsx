@@ -15,6 +15,7 @@ import {
 
 import { AppFooter } from '~/shared/components/app-footer'
 import { EmptyState } from '~/shared/components/empty-state'
+import { ShareLinkButton } from '~/shared/components/share-link-button'
 import { Button } from '~/shared/ui/button'
 import { parseApiError } from '~/shared/lib/api-error'
 
@@ -117,6 +118,10 @@ function PetDetailPage() {
                   isFavourited={pet.isFavourited}
                   redirectPath={`/pets/${pet.id}`}
                 />
+                <ShareLinkButton
+                  path={`/pets/${pet.id}`}
+                  label={`Copy link to ${pet.name}`}
+                />
               </div>
             </div>
           </div>
@@ -131,6 +136,10 @@ function PetDetailPage() {
           petId={pet.id}
           isFavourited={pet.isFavourited}
           redirectPath={`/pets/${pet.id}`}
+        />
+        <ShareLinkButton
+          path={`/pets/${pet.id}`}
+          label={`Copy link to ${pet.name}`}
         />
       </div>
 
